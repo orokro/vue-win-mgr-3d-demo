@@ -13,7 +13,7 @@
     "material-icons": "^1.13.14",
     "sass": "^1.89.2",
     "three": "^0.178.0",
-    "three-query": "^0.10.0",
+    "three-query": "^0.11.0",
     "vue": "^3.5.17",
     "vue-win-mgr": "^0.8.0"
   },

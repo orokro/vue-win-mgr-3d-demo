@@ -14,6 +14,9 @@
 // our app classes
 import App from "./App";
 
+// lib/misc
+import ThreeQuery from "three-query";
+
 // main export
 export default class SceneMgr {
 
@@ -26,6 +29,17 @@ export default class SceneMgr {
 
 		// store the app instance
 		this.app = app;
+
+		// we'll create a reusable scene with our ThreeQuery helper:
+		const container = document.createElement("div");
+		this.sceneDetails = ThreeQuery.createScene(container, {
+			autoSize: false,
+			autoRender: false,
+			addLights: true,
+			addControls: false,
+			addCube: true,
+		});
+		this.scene = this.sceneDetails.scene;
 
 	}
 

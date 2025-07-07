@@ -67,7 +67,7 @@ export default class App {
 		this.sceneMgr = new SceneMgr(this);
 		this.assetMgr = new AssetMgr(this);
 		this.noteMgr = new NoteMgr(this);
-		this.SettingsMgr = new SettingsMgr(this);
+		this.settingsMgr = new SettingsMgr(this);
 	}
 
 }

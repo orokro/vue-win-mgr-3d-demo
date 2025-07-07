@@ -5,20 +5,32 @@
 	The main entry component for the application.
 -->
 <template>
-	<main>
-		3D app
-	</main>
+
+	<div class="testSpot a">
+		<Viewport />
+	</div>
+	<div class="testSpot b">
+		<Viewport />
+	</div>
+
 </template>
 <script setup>
 
 // vue
-import { onMounted } from 'vue';
+import { onMounted, provide } from 'vue';
+
+// components
+// import Viewport from './components/windows/Viewport.vue';
 
 // our app classes
 import App from './classes/App.js';
+import Viewport from './components/windows/Viewport.vue';
 
 // instantiate the app
 const app = new App();
+
+// we'll provide the app for dependency injection in whatever windows mount
+provide('app', app);
 
 // for debug, we'll provide it to the window context so it will be available in the console
 onMounted(() => {
@@ -27,30 +39,33 @@ onMounted(() => {
 
 </script>
 <style lang="scss" scoped>
-	header {
-		line-height: 1.5;
+
+	body {
+		background: rgb(5, 5, 66);
+		/* background: red; */
 	}
 
-	.logo {
-		display: block;
-		margin: 0 auto 2rem;
-	}
+	.testSpot {
 
-	@media (min-width: 1024px) {
-		header {
-			display: flex;
-			place-items: center;
-			padding-right: calc(var(--section-gap) / 2);
+		// for now, fixed sized box
+		position: absolute;
+		left: 50px;
+		top: 50px;
+		width: 640px;
+		height: 480px;
+
+		&.a {
+			left: 50px;
+		}
+		&.b {
+			left: 700px;
 		}
 
-		.logo {
-			margin: 0 2rem 0 0;
-		}
+		// border & bg
+		border: 5px solid black;
+		border-radius: 5px;
+		background: gray;
 
-		header .wrapper {
-			display: flex;
-			place-items: flex-start;
-			flex-wrap: wrap;
-		}
-	}
+	}// .testSpot
+
 </style>
