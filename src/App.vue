@@ -6,7 +6,7 @@
 -->
 <template>
 	<main>
-		meow
+		3D app
 	</main>
 </template>
 <script setup>
@@ -14,6 +14,16 @@
 // vue
 import { onMounted } from 'vue';
 
+// our app classes
+import App from './classes/App.js';
+
+// instantiate the app
+const app = new App();
+
+// for debug, we'll provide it to the window context so it will be available in the console
+onMounted(() => {
+	window.app = app;
+});
 
 </script>
 <style lang="scss" scoped>
