@@ -62,7 +62,7 @@ onMounted(() => {
 		}
 
 		// border & bg
-		border: 5px solid black;
+		border: 2px solid gray;
 		border-radius: 5px;
 		background: gray;
 
