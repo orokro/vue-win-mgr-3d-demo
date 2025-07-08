@@ -34,6 +34,7 @@
 	- Inspector view - this will allow the user to inspect the objects in the scene, and change their properties, such as position, rotation, scale, etc.
 	- Settings view - this will allow the user to change the settings of the application, such as the background color, camera position, etc.
 	- Notes - a basic text editor in a window
+	- About - a basic about page, with some information about the app, library, and its author
 
 	Right, so the application state will be pretty simple:
 	- List of available objects to add to the scene
