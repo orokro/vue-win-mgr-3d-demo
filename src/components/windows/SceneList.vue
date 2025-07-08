@@ -3,7 +3,7 @@
 	-------------
 
 	This component simply displays a list of the objects in the scene,
-	allows them to be selected by clicking, or deleted by clicking the (X) button.\
+	allows them to be selected by clicking, or deleted by clicking the (X) button.
 
 	This code is similar to the Notes thing, but we just have one column for the list.
 -->
@@ -11,12 +11,12 @@
 
 	<div class="scene-list-window">
 
-		<!-- left column of items in the scene -->
+		<!-- column of items in the scene -->
 		<div class="items-list">
 
 			<div class="header">Scene Items:</div>
 
-			<!-- list box containing the notes & add button -->
+			<!-- list box containing the items & add button -->
 			<div class="list">
 
 				<!-- loop through items in the scene -->
@@ -127,7 +127,7 @@ const sceneMgr = app.sceneMgr;
 				overflow-y: auto;
 				overflow-x: hidden;
 
-				// the row for a note in the list
+				// the row for a scene item in the list
 				.scene-item {
 
 					// fixed height
@@ -140,7 +140,7 @@ const sceneMgr = app.sceneMgr;
 						background: rgba(255, 255, 255, 0.15);
 					}
 
-					// title for the note
+					// title for the scene item
 					.item-title {
 
 						// fill container, but leave room for (X)

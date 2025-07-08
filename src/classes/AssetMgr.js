@@ -9,6 +9,9 @@
 	but maybe in the future we could support importing models from files.
 */
 
+// vue
+import { shallowRef } from "vue";
+
 // our app classes
 import App from "./App";
 
@@ -25,11 +28,31 @@ export default class AssetMgr {
 		// store the app instance
 		this.app = app;
 
+		/*
+			Items we'll support:
+			Cube
+			Sphere
+			Torus
+			Cone
+			Cylinder
+			Dodecahedron
+			Icosahedron
+			Octahedron
+			Tetrahedron
+		*/
+
 		// initialize the assets list with some hardcoded assets
-		this.assets = [
-			{ id: 1, name: "Cube", model: "cube.glb" },
-			{ id: 2, name: "Sphere", model: "sphere.glb" },
-			{ id: 3, name: "Torus", model: "torus.glb" }
-		];
+		this.assets = shallowRef([
+			{ id: 1, name: "Cube" },
+			{ id: 2, name: "Sphere" },
+			{ id: 3, name: "Torus" },
+			{ id: 4, name: "Cone" },
+			{ id: 5, name: "Cylinder" },
+			{ id: 6, name: "Dodecahedron" },
+			{ id: 7, name: "Icosahedron" },
+			{ id: 8, name: "Octahedron" },
+			{ id: 9, name: "Tetrahedron" }
+		]);
 	}
+	
 }

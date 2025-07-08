@@ -12,7 +12,8 @@
 	<div class="testSpot b">
 		<!-- <Notes /> -->
 		<!-- <About /> -->
-		<SceneList />
+		<!-- <SceneList /> -->
+		<Assets />
 	</div>
 
 </template>
@@ -26,6 +27,7 @@ import Viewport from './components/windows/Viewport.vue';
 import Notes from './components/windows/Notes.vue';
 import About from './components/windows/About.vue';
 import SceneList from './components/windows/SceneList.vue';
+import Assets from './components/windows/Assets.vue';
 
 // our app classes
 import App from './classes/App.js';
