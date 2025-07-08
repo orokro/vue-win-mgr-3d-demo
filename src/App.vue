@@ -5,26 +5,35 @@
 	The main entry component for the application.
 -->
 <template>
+	
+	<main @contextmenu="disableContextMenus">
 
-	<div class="testSpot a">
-		<!-- <Viewport /> -->
-		 <SceneList />
-	</div>
-	<div class="testSpot b">
-		<!-- <Notes /> -->
-		<!-- <About /> -->
-		<!-- <SceneList /> -->
-		<!-- <Assets /> -->
-		<PropertiesInspector />
-	</div>
-
+		<WindowManager
+			v-if="true"
+			ref="windowManagerEl"
+			:availableWindows="availableWindows"
+			:defaultLayout="layout"
+			:showTopBar="true"
+			:showStatusBar="true"
+			:topBarComponent="HeaderBar"
+			:splitMergeHandles="true"
+		>
+			<template #statusBar>
+				<StatusBar/>
+			</template>
+		</WindowManager>
+	
+	</main>
 </template>
 <script setup>
 
-// vue
-import { onMounted, provide } from 'vue';
 
-// components
+// vue
+import { onMounted, provide, ref } from 'vue';
+
+import 'vue-win-mgr/dist/style.css';
+
+// window components
 import Viewport from './components/windows/Viewport.vue';
 import Notes from './components/windows/Notes.vue';
 import About from './components/windows/About.vue';
@@ -32,9 +41,24 @@ import SceneList from './components/windows/SceneList.vue';
 import Assets from './components/windows/Assets.vue';
 import PropertiesInspector from './components/windows/PropertiesInspector.vue';
 
+// other components
+import HeaderBar from './components/HeaderBar.vue';
+import StatusBar from './components/StatusBar.vue';
+
 // our app classes
 import App from './classes/App.js';
 
+// our window manager system from the library
+import { 
+	WindowManager, 
+	FRAME_STYLE,
+	WindowManagerContext,
+	WindowFrameContext,
+	WindowContext
+} from 'vue-win-mgr';
+
+// ref to our window manager element!
+const windowManagerEl = ref(null);
 
 // instantiate the app
 const app = new App();
@@ -42,9 +66,125 @@ const app = new App();
 // we'll provide the app for dependency injection in whatever windows mount
 provide('app', app);
 
+// list of windows to allow in our WindowManager
+const availableWindows = [
+	{
+		window: Viewport,
+		title: "Scene Viewport",
+		slug: "viewport",
+	},
+	{
+		window: Notes,
+		title: "Notes",
+		slug: "notes",
+	},
+	{
+		window: SceneList,
+		title: "Scene Items",
+		slug: "scene-list",
+	},
+	{
+		window: Assets,
+		title: "Assets",
+		slug: "assets",
+	},
+	{
+		window: PropertiesInspector,
+		title: "Properties Inspector",
+		slug: "properties-inspector",
+	},
+	{
+		window: About,
+		title: "About This App",
+		slug: "about",
+	},
+	{
+		window: About,
+		title: "Settings",
+		slug: "settings",
+	}
+];
+
+// build a layout to test with
+const layout  = [
+
+	{	
+		// we'll build layout in hypothetical 1080P space
+		name: "window",
+		top: 0,
+		left: 0,
+		bottom: 1080,
+		right: 1920
+	},
+	{
+		// Main  editor:
+		name: "MainView",
+		windows: ['viewport', 'about', 'notes'], 
+		style: FRAME_STYLE.TABBED,
+		left: 0,
+		right: ["ref", "window.right-430"],
+		top: 0,
+		bottom: ["ref", "window.bottom-300"]
+	},
+	{
+		// debug view under main view
+		name: "bottom",
+		windows: ['assets', 'notes',], 
+		left: 0,
+		style: FRAME_STYLE.TABBED,
+		//left: ["ref", "VerticalToolBar.right"],
+		right: ["ref", "MainView.right"],
+		top: ["ref", "MainView.bottom"],
+		bottom: ["ref", "window.bottom"]
+	},
+	{	// Tool palette, on right by default
+		name: "sceneList",
+		windows: ['scene-list', 'settings'], 
+		style: FRAME_STYLE.TABBED,
+		left: ["ref", "MainView.right"],
+		right: ["ref", "window.right"],
+		top: 0,
+		bottom: ["ref", "window.top+400"]
+	},
+	{
+		// Properties inspector, on right by default
+		name: "propertiesInspector",
+		windows: ['properties-inspector'], 
+		style: FRAME_STYLE.TABBED,
+		left: ["ref", "MainView.right"],
+		right: ["ref", "window.right"],
+		top: ["ref", "sceneList.bottom"],
+		bottom: ["ref", "window.bottom"]
+	}
+];
+
+
+/**
+ * Disable right-click context menu from browser, unless Shift is held, for debug
+ * @param {Event} event - JS Event object
+ */
+function disableContextMenus(event){
+
+	// return;
+
+	// if a parent element enable right click, we're good
+	// if(checkParentsForClass(event.target, 'rightclick_allowed')!=false)
+	// 	return;
+
+	if(event.shiftKey==false){
+		event.preventDefault();
+		return false;
+	}
+}
+
+
 // for debug, we'll provide it to the window context so it will be available in the console
 onMounted(() => {
+
 	window.app = app;
+
+	const ctx = windowManagerEl.value?.getContext();
+	window.wctx = ctx;
 });
 
 </script>

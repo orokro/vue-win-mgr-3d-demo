@@ -22,12 +22,10 @@ export default class SettingsMgr {
 		// store the app instance
 		this.app = app;
 
-		// initialize settings with some default values
-		this.settings = shallowRef({
-			backgroundColor: "#000000",
-			showGrid: true,
-			cameraPosition: { x: 0, y: 0, z: 5 },
-			lightingEnabled: true
-		});
+		// initialize settings with some default values		
+		this.backgroundColor = ref("#000000");
+		this.showGrid = ref(true);
+		this.lightingEnabled = ref(true);		
 	}
+
 }
