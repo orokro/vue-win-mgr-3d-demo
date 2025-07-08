@@ -27,7 +27,7 @@ import ThreeQuery from 'three-query';
 // get our app & instantiate a local ThreeQuery
 const app = inject('app');
 const scene = app.sceneMgr.scene;
-const $ = new ThreeQuery(scene);
+const tq = new ThreeQuery(scene);
 
 // our element to mount the viewport to
 const viewportContainerEl = ref(null);

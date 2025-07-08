@@ -10,7 +10,8 @@
 		<Viewport />
 	</div>
 	<div class="testSpot b">
-		<Notes />
+		<!-- <Notes /> -->
+		<About />
 	</div>
 
 </template>
@@ -22,6 +23,7 @@ import { onMounted, provide } from 'vue';
 // components
 import Viewport from './components/windows/Viewport.vue';
 import Notes from './components/windows/Notes.vue';
+import About from './components/windows/About.vue';
 
 // our app classes
 import App from './classes/App.js';
