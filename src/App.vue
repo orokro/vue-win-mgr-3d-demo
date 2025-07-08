@@ -7,13 +7,15 @@
 <template>
 
 	<div class="testSpot a">
-		<Viewport />
+		<!-- <Viewport /> -->
+		 <SceneList />
 	</div>
 	<div class="testSpot b">
 		<!-- <Notes /> -->
 		<!-- <About /> -->
 		<!-- <SceneList /> -->
-		<Assets />
+		<!-- <Assets /> -->
+		<PropertiesInspector />
 	</div>
 
 </template>
@@ -28,6 +30,7 @@ import Notes from './components/windows/Notes.vue';
 import About from './components/windows/About.vue';
 import SceneList from './components/windows/SceneList.vue';
 import Assets from './components/windows/Assets.vue';
+import PropertiesInspector from './components/windows/PropertiesInspector.vue';
 
 // our app classes
 import App from './classes/App.js';

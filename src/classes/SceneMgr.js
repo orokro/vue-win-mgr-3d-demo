@@ -27,7 +27,7 @@ import * as THREE from "three";
 export default class SceneMgr {
 
 	// for generating unique item IDs
-	static itemIDCounter = 0;
+	static itemIDCounter = 1;
 
 	/**
 	 * Constructor for the SceneMgr class.
@@ -82,7 +82,7 @@ export default class SceneMgr {
 		// this.addItem("Octahedron");
 		// this.addItem("Tetrahedron");
 		// return;
-		
+
 		// add a few demo items to the scene
 		const a = this.addItem("Cube");
 		const b = this.addItem("Sphere");
