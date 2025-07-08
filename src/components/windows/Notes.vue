@@ -175,6 +175,16 @@ const noteMgr = app.noteMgr;
 						background: rgba(255, 255, 255, 0.15);
 					}
 
+					&:first-child {
+						border-top-left-radius: 3px;
+						border-top-right-radius: 3px;
+					}
+
+					&:last-child {
+						border-bottom-left-radius: 3px;
+						border-bottom-right-radius: 3px;
+					}
+
 					// title for the note
 					.note-title {
 

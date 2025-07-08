@@ -127,6 +127,8 @@ const sceneMgr = app.sceneMgr;
 				overflow-y: auto;
 				overflow-x: hidden;
 
+				padding: 3px;
+
 				// the row for a scene item in the list
 				.scene-item {
 
@@ -138,6 +140,16 @@ const sceneMgr = app.sceneMgr;
 					background: rgba(255, 255, 255, 0.2);
 					&:nth-child(even) {
 						background: rgba(255, 255, 255, 0.15);
+					}
+
+					&:first-child {
+						border-top-left-radius: 3px;
+						border-top-right-radius: 3px;
+					}
+
+					&:last-child {
+						border-bottom-left-radius: 3px;
+						border-bottom-right-radius: 3px;
 					}
 
 					// title for the scene item
