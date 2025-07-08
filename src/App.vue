@@ -11,7 +11,8 @@
 	</div>
 	<div class="testSpot b">
 		<!-- <Notes /> -->
-		<About />
+		<!-- <About /> -->
+		<SceneList />
 	</div>
 
 </template>
@@ -24,6 +25,7 @@ import { onMounted, provide } from 'vue';
 import Viewport from './components/windows/Viewport.vue';
 import Notes from './components/windows/Notes.vue';
 import About from './components/windows/About.vue';
+import SceneList from './components/windows/SceneList.vue';
 
 // our app classes
 import App from './classes/App.js';
