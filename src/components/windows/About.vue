@@ -23,7 +23,7 @@
 				<br/><br/>
 				<a href="https://github.com/orokro/vue-win-mgr-3d-demo" target="_blank"><code>vue-win-mgr-3d-demo</code> on GitHub</a>
 				<br/>
-				<a href="https://github.com/orokro/vue-win-mgr-3d-demo" target="_blank"><img src="/img/github_logo.png" alt="GitHub Logo" height="60px" style="vertical-align: middle;"></a>
+				<a href="https://github.com/orokro/vue-win-mgr-3d-demo" target="_blank"><img src="/img/logos/github_logo.png" alt="GitHub Logo" height="60px" style="vertical-align: middle;"></a>
 			</p>
 			<br/><hr><br/>
 			<p>
@@ -31,11 +31,11 @@
 				<br/><br/>
 				<a href="https://github.com/orokro/Vue-Window-Manager" target="_blank"><code>vue-win-mgr</code> on GitHub</a>
 				<br/>
-				<a href="https://github.com/orokro/Vue-Window-Manager" target="_blank"><img src="/img/github_logo.png" alt="GitHub Logo" height="60px" style="vertical-align: middle;"></a>
+				<a href="https://github.com/orokro/Vue-Window-Manager" target="_blank"><img src="/img/logos/github_logo.png" alt="GitHub Logo" height="60px" style="vertical-align: middle;"></a>
 				<br/><br/>
 				<a href="https://www.npmjs.com/package/vue-win-mgr?activeTab=readme" target="_blank"><code>vue-win-mgr</code> on NPM</a>
 				<br/>
-				<a href="https://www.npmjs.com/package/vue-win-mgr?activeTab=readme" target="_blank"><img src="/img/npm_logo.png" alt="GitHub Logo" height="40px" style="margin-left: 28px; vertical-align: middle;"></a>
+				<a href="https://www.npmjs.com/package/vue-win-mgr?activeTab=readme" target="_blank"><img src="/img/logos/npm_logo.png" alt="GitHub Logo" height="40px" style="margin-left: 28px; vertical-align: middle;"></a>
 			</p>
 			<br/><hr><br/>
 

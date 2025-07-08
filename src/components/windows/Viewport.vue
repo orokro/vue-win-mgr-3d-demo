@@ -15,6 +15,7 @@
 	<div ref="viewportContainerEl" class="viewport-window">
 
 	</div>
+	
 </template>
 <script setup>
 
@@ -58,7 +59,7 @@ onMounted(()=>{
 		height: 100%;
 
 		// for debug
-		border: 2px solid red;
+		/* border: 2px solid red; */
 
 	}// .viewport-window
 

@@ -49,7 +49,10 @@ export default class SceneMgr {
 			addCube: false,
 		});
 		this.scene = this.sceneDetails.scene;
+		this.lights = this.sceneDetails.lights;
 
+		this.lights.directionalLight.position.set(5, 10, 5);
+		this.lights.directionalLight.intensity = 2.5;
 		// keep track of a selected item ID, or null if nothing is selected
 		this.selectedItemID = ref(null);
 
@@ -69,6 +72,17 @@ export default class SceneMgr {
 	 */
 	addDemoItems(){
 
+		// this.addItem("Cube");
+		// this.addItem("Sphere");
+		// this.addItem("Torus");
+		// this.addItem("Cone");
+		// this.addItem("Cylinder");
+		// this.addItem("Dodecahedron");
+		// this.addItem("Icosahedron");
+		// this.addItem("Octahedron");
+		// this.addItem("Tetrahedron");
+		// return;
+		
 		// add a few demo items to the scene
 		const a = this.addItem("Cube");
 		const b = this.addItem("Sphere");
