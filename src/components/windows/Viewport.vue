@@ -12,7 +12,7 @@
 -->
 <template>
 
-	<div ref="viewportBox" class="viewport-box">
+	<div ref="viewportContainerEl" class="viewport-window">
 
 	</div>
 </template>
@@ -30,12 +30,12 @@ const scene = app.sceneMgr.scene;
 const $ = new ThreeQuery(scene);
 
 // our element to mount the viewport to
-const viewportBox = ref(null);
+const viewportContainerEl = ref(null);
 
 // build in Mount ThreeQuery renderer stuffs when we mount
 onMounted(()=>{
 
-	const container = viewportBox.value;
+	const container = viewportContainerEl.value;
 	ThreeQuery.useScene(scene, container, {
 		autoSize: true,
 		autoRender: true,
@@ -49,7 +49,7 @@ onMounted(()=>{
 <style lang="scss" scoped>
 
 	// simply fill the parent container with some optional debug border
-	.viewport-box {
+	.viewport-window {
 
 		// fill container
 		position: absolute;
@@ -60,6 +60,6 @@ onMounted(()=>{
 		// for debug
 		border: 2px solid red;
 
-	}// .viewport-box
+	}// .viewport-window
 
 </style>

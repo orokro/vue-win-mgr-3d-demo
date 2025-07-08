@@ -10,7 +10,7 @@
 		<Viewport />
 	</div>
 	<div class="testSpot b">
-		<Viewport />
+		<Notes />
 	</div>
 
 </template>
@@ -20,11 +20,12 @@
 import { onMounted, provide } from 'vue';
 
 // components
-// import Viewport from './components/windows/Viewport.vue';
+import Viewport from './components/windows/Viewport.vue';
+import Notes from './components/windows/Notes.vue';
 
 // our app classes
 import App from './classes/App.js';
-import Viewport from './components/windows/Viewport.vue';
+
 
 // instantiate the app
 const app = new App();
@@ -45,6 +46,8 @@ onMounted(() => {
 		/* background: red; */
 	}
 
+	// before we introduce the window manager, we'll use some fixed-positioned boxes to test
+	// out the components
 	.testSpot {
 
 		// for now, fixed sized box

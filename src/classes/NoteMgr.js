@@ -11,7 +11,7 @@
 */
 
 // vue
-import { shallowRef, ref } from "vue";
+import { shallowRef, ref, computed } from "vue";
 
 // our app classes
 import App from "./App";
@@ -34,6 +34,96 @@ export default class NoteMgr {
 
 		// initialize the notes list
 		this.notes = shallowRef([]);
+
+		// we'll store the ID of the currently selected note, or null if none
+		this.selectedNote = ref(null);
+		this.selectedNoteObject = computed(() => {
+			return (
+				this.selectedNote.value!=null
+				? 
+				this.getNoteByID(this.selectedNote.value) 
+				: 
+				null);
+		});
+
+		// populate with demo notes if needed
+		this.addDemoNotes();
+	}
+
+
+	/**
+	 * To demonstrate the app, we'll populate it with some demo content
+	 */
+	addDemoNotes(){
+
+		// add a welcome note first
+		const welcomeNote = this.addNote();
+		this.setNoteName(welcomeNote.id, "Welcome Note");
+		this.setNoteContent(welcomeNote.id, 
+			`This is a demo note to show how the note-taking system works.
+			\n\nYou can add, remove, and update notes as you wish.
+			\n\nEnjoy! :)`
+		);
+
+		// add a fun second note
+		const funNote = this.addNote();
+		this.setNoteName(funNote.id, "Fun Note");
+		this.setNoteContent(funNote.id, 
+			`This is a fun note to show how the note-taking system works.
+			\n\nYou can add, remove, and update notes as you wish.
+			\n\nHave fun! :)`
+		);
+
+		// add a third note for good measure
+		const thirdNote = this.addNote();
+		this.setNoteName(thirdNote.id, "Third Note");
+		this.setNoteContent(thirdNote.id, 
+			`This is the third note to show how the note-taking system works.
+			\n\nYou can add, remove, and update notes as you wish.
+			\n\nThis is just a demo note.`
+		);
+		
+		// select our welcome msg by default
+		this.selectNote(welcomeNote.id);
+	}
+
+
+	/**
+	 * Selects a note
+	 * 
+	 * @param {Object|Number} noteOrNoteID - the note object or its ID to select
+	 * @returns {Boolean} - true if the note was found and selected, false otherwise
+	 */
+	selectNote(noteOrNoteID){
+
+		// if we got a note, use its ID, otherwise use the note ID directly
+		const noteID = typeof noteOrNoteID === "object" ? noteOrNoteID.id : parseInt(noteOrNoteID, 10);
+
+		// find the note by ID
+		const note = this.getNoteByID(noteID);
+		if(note) {
+
+			// set the selected note to this one
+			this.selectedNote.value = noteID;
+			return true;
+		}
+
+		// if not found, set selected to null
+		this.selectedNote.value = null;
+		return false;
+	}
+
+
+	/**
+	 * Clears the selection, if any
+	 * 
+	 * @returns {Boolean} - true if a note is selected, false otherwise
+	 */
+	selectNone(){
+		
+		// clear selection & gtfo
+		this.selectedNote.value = null;
+		return true;
 	}
 
 
@@ -42,7 +132,7 @@ export default class NoteMgr {
 	 * 
 	 * @returns {Object} - the newly created note object
 	 */
-	addNode(){
+	addNote(){
 
 		// make new note details.
 		const newNote = {
@@ -56,6 +146,9 @@ export default class NoteMgr {
 		// add it to the notes list
 		this.notes.value = [...this.notes.value, newNote];
 
+		// select new note automatically
+		this.selectNote(newNote.id);
+		
 		// return the new note
 		return newNote;
 	}
@@ -79,16 +172,36 @@ export default class NoteMgr {
 
 
 	/**
+	 * Deletes note
+	 * @param {Object} note - note ref to delete
+	 * @returns {Boolean} - true if the note was deleted, false if not
+	 */
+	deleteNote(note){
+
+		// gtfo if note is not an object or has no ID
+		if(note==null || typeof note !== "object" || !note.id)
+			return false;
+		this.deleteNoteByID(note.id);
+	}
+
+
+	/**
 	 * Deletes note via ID
 	 */
 	deleteNoteByID(id) {
 
 		// ensure the ID is an integer
 		id = parseInt(id, 10);
+
+		// before we delete it, deselect it if it was selected
+		if(this.selectedNote.value === id)
+			this.selectNone();
+		
+		// filter that sombitty out of the notes list
 		this.notes.value = this.notes.value.filter(n => n.id !== id);
 	}
 
-	
+
 	/**
 	 * Updates / sets notes name
 	 * 
