@@ -7,7 +7,7 @@
 <template>
 
 	<div class="about-window">
-		<div class="page">
+		<div class="page mac-bar">
 			<h1>About This App!</h1><br/>
 			<p>
 				This App is a simple Vue 3 application to demonstrate my 
@@ -95,18 +95,6 @@ import { ref, inject } from 'vue';
 
 			overflow-y: auto;
 			overflow-x: hidden;
-
-			// make scrollbar look mac-like
-			&::-webkit-scrollbar {
-				width: 8px;
-			}
-			&::-webkit-scrollbar-thumb {
-				background: rgba(0, 0, 0, 0.5);
-				border-radius: 4px;
-			}
-			&::-webkit-scrollbar-track {
-				background: rgba(0, 0, 0, 0.1);
-			}
 
 		}// .page
 

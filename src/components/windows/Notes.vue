@@ -162,6 +162,8 @@ const noteMgr = app.noteMgr;
 				overflow-y: auto;
 				overflow-x: hidden;
 
+				padding: 3px;
+				
 				// the row for a note in the list
 				.note-item {
 

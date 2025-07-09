@@ -20,7 +20,7 @@
 			<div class="header">Click and Drag Any Asset Type to the Scene:</div>
 
 			<!-- list box containing the available primitives to add to the scene -->
-			<div class="list">
+			<div class="list mac-bar">
 
 				<div class="flex-wrapper">
 
@@ -148,18 +148,6 @@ const assetMgr = app.assetMgr;
 
 					padding: 5px;
 					box-sizing: border-box;
-
-					// make scrollbar look mac-like
-					&::-webkit-scrollbar {
-						width: 8px;
-					}
-					&::-webkit-scrollbar-thumb {
-						background: rgba(0, 0, 0, 0.5);
-						border-radius: 4px;
-					}
-					&::-webkit-scrollbar-track {
-						background: rgba(0, 0, 0, 0.1);
-					}
 
 					// the row for a asset in the list
 					.asset-item {

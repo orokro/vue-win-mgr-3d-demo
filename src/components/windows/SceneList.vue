@@ -17,7 +17,7 @@
 			<div class="header">Scene Items:</div>
 
 			<!-- list box containing the items & add button -->
-			<div class="list">
+			<div class="list mac-bar">
 
 				<!-- loop through items in the scene -->
 				<div 

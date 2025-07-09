@@ -3,7 +3,7 @@
 		<div class="items-list">
 			<div class="header">Properties Inspector</div>
 
-			<div class="list">
+			<div class="list mac-bar">
 				<!-- No item selected -->
 				<div v-if="!selectedItem" class="no-selection">
 					Select an item to see and edit its properties

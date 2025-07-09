@@ -11,7 +11,7 @@
 body {
 
 	background: black;
-	
+
 	font-family:
 		Inter,
 		-apple-system,
@@ -32,3 +32,17 @@ body {
 
 	overflow: clip;
 }
+
+
+
+.mac-bar::-webkit-scrollbar {
+	width: 8px;
+}
+.mac-bar::-webkit-scrollbar-thumb {
+	background: rgba(230, 230, 230, 0.5);
+	border-radius: 4px;
+}
+.mac-bar::-webkit-scrollbar-track {
+	background: rgba(0, 0, 0, 0.1);
+}
+
