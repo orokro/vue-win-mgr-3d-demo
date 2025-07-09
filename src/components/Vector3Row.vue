@@ -1,7 +1,20 @@
+<!--
+	Vector3Row.vue
+	--------------
+
+	This is basically the same as a PropertyRow (see PropertyRow.vue),
+	
+	But specifically, this is for the Vector3 rows b/c of the extra layout requirements.
+-->
+
 <template>
+
+	<!-- same as the other property row, outside wrapper -->
 	<div class="property-row">
+		
 		<div class="label">{{ label }}</div>
 		<div class="value vector3">
+
 			<label v-for="axis in ['x', 'y', 'z']" :key="axis" class="vector-input">
 				{{ axis }}:
 				<input
@@ -13,12 +26,17 @@
 					style="cursor: ns-resize"
 				/>
 			</label>
+
 		</div>
 	</div>
-</template>
 
+</template>
 <script setup>
+
+// vue
 import { ref, watch, onMounted } from 'vue';
+
+
 const props = defineProps({
 	label: String,
 	vector: Object,
@@ -92,38 +110,52 @@ watch(inputs, (newVals) => {
 		if (!isNaN(parsed)) props.vector[axis] = parsed;
 	}
 }, { deep: true });
-</script>
 
-<style scoped>
-.property-row {
-	display: flex;
-	align-items: center;
-	padding: 4px 0;
-	border-radius: 4px;
-	background: rgba(255, 255, 255, 0.15);
-	margin-bottom: 4px;
-}
-.label {
-	width: 100px;
-	padding-left: 10px;
-}
-.value.vector3 {
-	display: flex;
-	gap: 6px;
-}
-.vector-input {
-	display: flex;
-	align-items: center;
-	gap: 4px;
-}
-input {
-	width: 50px;
-	text-align: right;
-	padding: 3px 6px;
-	border-radius: 3px;
-	border: none;
-}
-.invalid {
-	background: #ffaaaa;
-}
+</script>
+<style lang="scss" scoped>
+
+	.property-row {
+
+		display: flex;
+		align-items: center;
+		padding: 4px 0;
+		border-radius: 4px;
+		background: rgba(255, 255, 255, 0.15);
+		margin-bottom: 4px;
+	
+		.label {
+			width: 100px;
+			padding-left: 10px;
+			
+		}// .label
+
+		.value.vector3 {
+			display: flex;
+			gap: 6px;
+			
+		}// .value.vector3
+
+		.vector-input {
+			display: flex;
+			align-items: center;
+			gap: 4px;
+
+		}// .vector-input
+
+		input {
+			width: 50px;
+			text-align: right;
+			padding: 3px 6px;
+			border-radius: 3px;
+			border: none;
+
+		}// input
+
+		.invalid {
+			background: #ffaaaa;
+
+		}// .invalid
+
+	}// .property-row
+
 </style>
