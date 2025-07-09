@@ -21,197 +21,112 @@
 				<!-- Properties Table -->
 				<template v-else>
 
-					<!-- Properties Section -->
-					<div class="section-header">Properties</div>
+					<!-- PROPERTIES -->
+					<div class="group">
+						<div class="group-title">Properties</div>
+						<PropertyRow label="ID">{{ selectedItem.id }}</PropertyRow>
+						<PropertyRow label="Name"><input v-model="selectedItem.name.value" type="text" /></PropertyRow>
+						<PropertyRow label="Visible"><input v-model="selectedItem.mesh.visible" type="checkbox" /></PropertyRow>
+					</div>
 
-					<PropertyRow label="ID">
-						<input type="text" :value="selectedItem.id" readonly />
-					</PropertyRow>
+					<!-- TRANSFORM -->
+					<div class="group">
+						<div class="group-title">Transform</div>
+						<Vector3Row label="Position" v-model="selectedItem.mesh.position" />
+						<Vector3Row label="Rotation" v-model="selectedItem.mesh.rotation" />
+						<Vector3Row label="Scale" v-model="selectedItem.mesh.scale" />
+					</div>
 
-					<PropertyRow label="Name">
-						<input type="text" v-model="selectedItem.name.value" />
-					</PropertyRow>
-
-					<PropertyRow label="Visible">
-						<input type="checkbox" v-model="selectedItem.mesh.visible" />
-					</PropertyRow>
-
-					<!-- Transform Section -->
-					<div class="section-header">Transform</div>
-
-					<Vector3Row label="Position" :vector="selectedItem.mesh.position" />
-					<Vector3Row label="Rotation" :vector="selectedItem.mesh.rotation" isRotation />
-					<Vector3Row label="Scale" :vector="selectedItem.mesh.scale" />
-
-					<!-- Material Section -->
-					<div class="section-header">Material</div>
-
-					<PropertyRow label="Color">
-						<input type="color" :value="selectedItem.mesh.material.color.getStyle()" @input="onColorInput($event)" />
-					</PropertyRow>
-
-					<PropertyRow label="Roughness">
-						<input type="range" min="0" max="1" step="0.01" v-model.number="selectedItem.mesh.material.roughness" />
-					</PropertyRow>
-
-					<PropertyRow label="Metalness">
-						<input type="range" min="0" max="1" step="0.01" v-model.number="selectedItem.mesh.material.metalness" />
-					</PropertyRow>
+					<!-- MATERIAL -->
+					<div class="group">
+						<div class="group-title">Material</div>
+						<PropertyRow label="Color">
+							<input type="color" v-model="materialColor" />
+						</PropertyRow>
+						<PropertyRow label="Roughness">
+							<input type="range" min="0" max="1" step="0.01" v-model.number="selectedItem.mesh.material.roughness" />
+						</PropertyRow>
+						<PropertyRow label="Metalness">
+							<input type="range" min="0" max="1" step="0.01" v-model.number="selectedItem.mesh.material.metalness" />
+						</PropertyRow>
+					</div>
 
 				</template>
 
-			<!-- /.list -->
 			</div>
-
-		<!-- /.items-list -->
 		</div>
 
-	<!-- /.properties-inspector-window -->
 	</div>
-	
 </template>
+
 <script setup>
 
 // vue
-import { inject, computed, defineComponent, ref, watch } from 'vue';
+import { inject, computed } from "vue";
 
-// components
-import PropertyRow from '../PropertyRow.vue';
-import Vector3Row from '../Vector3Row.vue';
+// widgets
+import PropertyRow from "../PropertyRow.vue";
+import Vector3Row from "../Vector3Row.vue";
 
-// app state
-const app = inject('app');
-const sceneMgr = app.sceneMgr;
+// inject the app
+const app = inject("app");
 
-// computed item from selection
+// return the selected item object
 const selectedItem = computed(() => {
-	const id = sceneMgr.selectedItemID.value;
-	return id ? sceneMgr.getItemByID(id) : null;
+	const id = app.sceneMgr.selectedItemID.value;
+	return app.sceneMgr.getItemByID(id);
 });
 
-// update material color from input
-function onColorInput(e) {
-
-	if (!selectedItem.value)
-		return;
-	selectedItem.value.mesh.material.color.setStyle(e.target.value);
-}
+// computed color string
+const materialColor = computed({
+	get() {
+		if (!selectedItem.value) return '#000000';
+		return `#${selectedItem.value.mesh.material.color.getHexString()}`;
+	},
+	set(value) {
+		if (!selectedItem.value) return;
+		selectedItem.value.mesh.material.color.set(value);
+	}
+});
 
 </script>
-<style lang="scss" scoped>
 
+<style scoped lang="scss">
+
+	// outer
 	.properties-inspector-window {
 
-		position: absolute;
-		inset: 0px;
-		width: 100%;
 		height: 100%;
-		background: lightgray;
+		display: flex;
+		flex-direction: column;
+		background: #1c1c1c;
 
 		.items-list {
-			user-select: none;
-			-webkit-user-select: none;
-			position: absolute;
-			inset: 0;
-			background: rgba(0, 0, 0, 0.5);
-			border-right: 1px solid rgba(255, 255, 255, 0.2);
+			flex: 1;
+			overflow: auto;
+			padding: 10px;
+		}
 
-			.list {
-				position: absolute;
-				inset: 10px 10px 10px 10px;
-				background: rgba(0, 0, 0, 0.7);
-				border-radius: 5px;
-				overflow-y: auto;
-				overflow-x: hidden;
-				padding: 10px;
-				color: white;
-				font-size: 14px;
+		.no-selection {
+			padding: 20px;
+			font-size: 15px;
+			color: #aaa;
+			font-style: italic;
+			text-align: center;
+		}
 
-				.no-selection {
-					padding: 10px;
-					color: #ccc;
-					text-align: center;
+		.group {
+			margin-bottom: 20px;
+		}
 
-				}// .no-selection
+		.group-title {
+			font-size: 14px;
+			font-weight: bold;
+			color: #0ff;
+			margin: 10px 0;
+			border-bottom: 1px solid #444;
+			padding-bottom: 3px;
+		}
+	}
 
-				.section-header {
-					font-weight: bold;
-					color: #00abae;
-					margin: 10px 0 5px;
-
-				}// .section-header
-
-				.property-row {
-					display: flex;
-					align-items: center;
-					padding: 4px 0;
-					border-radius: 4px;
-					background: rgba(255, 255, 255, 0.15);
-					margin-bottom: 4px;
-
-					&:nth-child(even) {
-						background: rgba(255, 255, 255, 0.2);
-
-					}// &:nth-child(even)
-
-					.label {
-						width: 100px;
-						padding-left: 10px;
-
-					}// .label
-
-					.value {
-						flex: 1;
-						display: flex;
-						flex-wrap: wrap;
-
-						input[type='text'],
-						input[type='range'],
-						input[type='color'] {
-							margin-left: 8px;
-							padding: 3px 6px;
-							border-radius: 3px;
-							border: none;
-							accent-color: #00ABAE;
-						}
-
-						input[type='checkbox'] {
-							accent-color: #00abae;
-							margin-left: 6px;
-							transform: scale(1.2);
-						}
-
-						.vector3 {
-
-							display: flex;
-							gap: 6px;
-
-							.vector-input {
-								display: flex;
-								align-items: center;
-								gap: 4px;
-
-								input {
-									width: 50px;
-									text-align: right;
-									
-								}
-
-								.invalid {
-									background: #ffaaaa;
-								}
-
-							}// .vector-input
-
-						}// .vector3
-						
-					}// .value
-
-				}// .property-row
-
-			}// .list
-
-		}// ..items-list
-
-	}// .properties-inspec
 </style>
