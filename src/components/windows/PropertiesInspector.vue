@@ -1,5 +1,14 @@
+<!--
+	PropertiesInspector.vue
+	-----------------------
+
+	This is the panel with the list of settings that can be used to tweak the 3D objects in the scene.
+-->
 <template>
+
+	<!-- outermost wrapper -->
 	<div class="properties-inspector-window">
+
 		<div class="items-list">
 
 			<div class="list mac-bar">
@@ -48,10 +57,18 @@
 					<PropertyRow label="Metalness">
 						<input type="range" min="0" max="1" step="0.01" v-model.number="selectedItem.mesh.material.metalness" />
 					</PropertyRow>
+
 				</template>
+
+			<!-- /.list -->
 			</div>
+
+		<!-- /.items-list -->
 		</div>
+
+	<!-- /.properties-inspector-window -->
 	</div>
+	
 </template>
 <script setup>
 
@@ -74,14 +91,17 @@ const selectedItem = computed(() => {
 
 // update material color from input
 function onColorInput(e) {
-	if (!selectedItem.value) return;
+
+	if (!selectedItem.value)
+		return;
 	selectedItem.value.mesh.material.color.setStyle(e.target.value);
 }
 
-
 </script>
 <style lang="scss" scoped>
+
 	.properties-inspector-window {
+
 		position: absolute;
 		inset: 0px;
 		width: 100%;
@@ -111,13 +131,15 @@ function onColorInput(e) {
 					padding: 10px;
 					color: #ccc;
 					text-align: center;
-				}
+
+				}// .no-selection
 
 				.section-header {
 					font-weight: bold;
 					color: #00abae;
 					margin: 10px 0 5px;
-				}
+
+				}// .section-header
 
 				.property-row {
 					display: flex;
@@ -129,12 +151,14 @@ function onColorInput(e) {
 
 					&:nth-child(even) {
 						background: rgba(255, 255, 255, 0.2);
-					}
+
+					}// &:nth-child(even)
 
 					.label {
 						width: 100px;
 						padding-left: 10px;
-					}
+
+					}// .label
 
 					.value {
 						flex: 1;
@@ -148,6 +172,7 @@ function onColorInput(e) {
 							padding: 3px 6px;
 							border-radius: 3px;
 							border: none;
+							accent-color: #00ABAE;
 						}
 
 						input[type='checkbox'] {
@@ -157,6 +182,7 @@ function onColorInput(e) {
 						}
 
 						.vector3 {
+
 							display: flex;
 							gap: 6px;
 
@@ -168,16 +194,24 @@ function onColorInput(e) {
 								input {
 									width: 50px;
 									text-align: right;
+									
 								}
 
 								.invalid {
 									background: #ffaaaa;
 								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
+
+							}// .vector-input
+
+						}// .vector3
+						
+					}// .value
+
+				}// .property-row
+
+			}// .list
+
+		}// ..items-list
+
+	}// .properties-inspec
 </style>
