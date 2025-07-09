@@ -14,8 +14,6 @@
 		<!-- column of items in the scene -->
 		<div class="items-list">
 
-			<div class="header">Scene Items:</div>
-
 			<!-- list box containing the items & add button -->
 			<div class="list mac-bar">
 
@@ -94,30 +92,12 @@ const sceneMgr = app.sceneMgr;
 			background: rgba(0, 0, 0, 0.5);
 			border-right: 1px solid rgba(255, 255, 255, .2);
 
-			// header fixed on top
-			.header {
-
-				// fixed on top of left column
-				position: absolute;
-				inset: 0px 0px auto 0px;
-				height: 30px;
-
-				// for debug
-				/* border-bottom: 1px solid rgba(255, 255, 255, 0.2); */
-
-				// text settings
-				color: #EFEFEF;
-				font-weight: bolder;
-				padding: 4px 15px;
-
-			}// .header
-
 			// the list box containing notes:
 			.list {
 
 				// fixed under the header
 				position: absolute;
-				inset: 30px 10px 10px 10px;
+				inset: 10px 10px 10px 10px;
 
 				// darker than container	
 				background: rgba(0, 0, 0, 0.7);

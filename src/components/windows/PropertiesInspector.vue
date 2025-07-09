@@ -1,9 +1,9 @@
 <template>
 	<div class="properties-inspector-window">
 		<div class="items-list">
-			<div class="header">Properties Inspector</div>
 
 			<div class="list mac-bar">
+
 				<!-- No item selected -->
 				<div v-if="!selectedItem" class="no-selection">
 					Select an item to see and edit its properties
@@ -11,6 +11,7 @@
 
 				<!-- Properties Table -->
 				<template v-else>
+
 					<!-- Properties Section -->
 					<div class="section-header">Properties</div>
 
@@ -95,18 +96,9 @@ function onColorInput(e) {
 			background: rgba(0, 0, 0, 0.5);
 			border-right: 1px solid rgba(255, 255, 255, 0.2);
 
-			.header {
-				position: absolute;
-				inset: 0px 0px auto 0px;
-				height: 30px;
-				color: #efefef;
-				font-weight: bolder;
-				padding: 4px 15px;
-			}
-
 			.list {
 				position: absolute;
-				inset: 30px 10px 10px 10px;
+				inset: 10px 10px 10px 10px;
 				background: rgba(0, 0, 0, 0.7);
 				border-radius: 5px;
 				overflow-y: auto;

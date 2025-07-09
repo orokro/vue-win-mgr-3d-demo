@@ -65,9 +65,10 @@ import { ref, inject } from 'vue';
 		width: 100%;
 		height: 100%;
 
+		background: RGB(105,105,105);
 		// spacing
 		
-		padding: 20px;
+		padding: 10px;
 		box-sizing: border-box;
 
 		// white page
@@ -82,10 +83,10 @@ import { ref, inject } from 'vue';
 			padding: 20px;
 
 			// lighter box / styling
-			background: #EFEFEF;
+			background: #d6d6d6;
 			height: 100%;			
-			box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.5);
-			border: 1px solid black;
+			// box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.5);
+			// border: 1px solid black;
 			border-radius: 5px;
 
 			// text settings

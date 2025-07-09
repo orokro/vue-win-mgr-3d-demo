@@ -12,8 +12,10 @@
 -->
 <template>
 
-	<div ref="viewportContainerEl" class="viewport-window">
+	<div class="viewport-window">
+		<div ref="viewportContainerEl" class="container">
 
+		</div>
 	</div>
 	
 </template>
@@ -57,6 +59,24 @@ onMounted(()=>{
 		inset: 0px 0px 0px 0px;
 		width: 100%;
 		height: 100%;
+
+		background: RGB(105,105,105);
+		padding: 10px;
+
+		// container where we'll mount the canvas for 3js
+		.container {
+
+			// for debug
+			// border: 1px solid red;
+
+			// fill container, but observer padding
+			width: 100%;
+			height: 100%;
+			
+			border-radius: 5px;
+			overflow: clip;
+			
+		}// .container
 
 		// for debug
 		/* border: 2px solid red; */

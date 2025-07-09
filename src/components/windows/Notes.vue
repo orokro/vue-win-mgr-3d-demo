@@ -108,8 +108,9 @@ const noteMgr = app.noteMgr;
 		height: 100%;
 
 		// notes box styles
-		background: lightgray;
-
+		// background: lightgray;
+		background: rgb(105, 105, 105);
+		// background: red;
 		// for debug
 		/* border: 1px solid rgba(255, 255, 255, .2); */
 		
@@ -126,7 +127,7 @@ const noteMgr = app.noteMgr;
 			width: 170px;
 
 			// box styling
-			background: rgba(0, 0, 0, 0.5);
+			// background: rgba(0, 0, 0, 0.5);
 			border-right: 1px solid rgba(255, 255, 255, .2);
 
 			// header fixed on top
@@ -319,7 +320,7 @@ const noteMgr = app.noteMgr;
 					border: 2px solid rgba(0, 0, 0, .5);
 					outline: none;
 					background: rgba(255, 255, 255, .5);
-
+					background: RGB(214,214,214);
 				}// input
 
 			}// .note-title-input
@@ -339,8 +340,10 @@ const noteMgr = app.noteMgr;
 					border: 2px solid rgba(0, 0, 0, .5);
 					outline: none;
 					background: rgba(255, 255, 255, .5);
+					background: RGB(214,214,214);
 					color: black;
 					font-family: monospace;
+					
 				}// textarea
 
 			}// .note-content-input

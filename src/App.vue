@@ -17,6 +17,9 @@
 			:showStatusBar="true"
 			:topBarComponent="HeaderBar"
 			:splitMergeHandles="true"
+			:theme="{
+				frameTabsActiveColor: 'RGB(105,105,105)',
+			}"
 		>
 			<template #statusBar>
 				<StatusBar/>
