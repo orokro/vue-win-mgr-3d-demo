@@ -20,7 +20,7 @@ import App from "./App";
 export default class NoteMgr {
 
 	// for generating unique note IDs
-	static noteIDCounter = 0;
+	static noteIDCounter = 1;
 
 	/**
 	 * Constructor for the NoteMgr class.
@@ -34,17 +34,6 @@ export default class NoteMgr {
 
 		// initialize the notes list
 		this.notes = shallowRef([]);
-
-		// we'll store the ID of the currently selected note, or null if none
-		this.selectedNote = ref(null);
-		this.selectedNoteObject = computed(() => {
-			return (
-				this.selectedNote.value!=null
-				? 
-				this.getNoteByID(this.selectedNote.value) 
-				: 
-				null);
-		});
 
 		// populate with demo notes if needed
 		this.addDemoNotes();
@@ -81,49 +70,7 @@ export default class NoteMgr {
 			`This is the third note to show how the note-taking system works.
 			\n\nYou can add, remove, and update notes as you wish.
 			\n\nThis is just a demo note.`
-		);
-		
-		// select our welcome msg by default
-		this.selectNote(welcomeNote.id);
-	}
-
-
-	/**
-	 * Selects a note
-	 * 
-	 * @param {Object|Number} noteOrNoteID - the note object or its ID to select
-	 * @returns {Boolean} - true if the note was found and selected, false otherwise
-	 */
-	selectNote(noteOrNoteID){
-
-		// if we got a note, use its ID, otherwise use the note ID directly
-		const noteID = typeof noteOrNoteID === "object" ? noteOrNoteID.id : parseInt(noteOrNoteID, 10);
-
-		// find the note by ID
-		const note = this.getNoteByID(noteID);
-		if(note) {
-
-			// set the selected note to this one
-			this.selectedNote.value = noteID;
-			return true;
-		}
-
-		// if not found, set selected to null
-		this.selectedNote.value = null;
-		return false;
-	}
-
-
-	/**
-	 * Clears the selection, if any
-	 * 
-	 * @returns {Boolean} - true if a note is selected, false otherwise
-	 */
-	selectNone(){
-		
-		// clear selection & gtfo
-		this.selectedNote.value = null;
-		return true;
+		);		
 	}
 
 
@@ -146,9 +93,6 @@ export default class NoteMgr {
 		// add it to the notes list
 		this.notes.value = [...this.notes.value, newNote];
 
-		// select new note automatically
-		this.selectNote(newNote.id);
-		
 		// return the new note
 		return newNote;
 	}
@@ -192,10 +136,6 @@ export default class NoteMgr {
 
 		// ensure the ID is an integer
 		id = parseInt(id, 10);
-
-		// before we delete it, deselect it if it was selected
-		if(this.selectedNote.value === id)
-			this.selectNone();
 		
 		// filter that sombitty out of the notes list
 		this.notes.value = this.notes.value.filter(n => n.id !== id);

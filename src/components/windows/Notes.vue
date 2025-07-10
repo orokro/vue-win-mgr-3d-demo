@@ -26,8 +26,8 @@
 					v-for="note in noteMgr.notes.value"
 					:key="note.id"
 					class="note-item"
-					:class="{ selected: noteMgr.selectedNote.value === note.id }"
-					@click="noteMgr.selectNote(note)"
+					:class="{ selected: selectedNoteID === note.id }"
+					@click="selectNote(note)"
 				>
 					<!-- note title, editable on click -->
 					<div class="note-title">
@@ -35,13 +35,13 @@
 					</div>
 
 					<!-- delete button -->
-					<div class="delete-button" @click.stop="noteMgr.deleteNote(note)">
+					<div class="delete-button" @click.stop="deleteNote(note)">
 						<span class="icon">x</span>
 					</div>
 				</div>
 
 				<!-- button to add notes -->
-				<div class="add-note-button" @click="noteMgr.addNote()">
+				<div class="add-note-button" @click="addNote">
 					<span class="icon">+</span>
 				</div>
 
@@ -53,7 +53,7 @@
 
 		<!-- the right column w/ the title edit box & the content edit box -->
 		<div
-			v-if="noteMgr.selectedNote.value!=null"
+			v-if="selectedNoteID!=null"
 			class="note-editor"
 		>
 			<!-- input for the selected note's title -->
@@ -61,7 +61,7 @@
 				<input 
 					type="text" 
 					placeholder="Note Title"
-					v-model="noteMgr.selectedNoteObject.value.title.value"
+					v-model="selectedNoteObject.title.value"
 				/>
 			</div>
 
@@ -69,7 +69,7 @@
 			<div class="note-content-input">
 				<textarea 
 					placeholder="Note Content"
-					v-model="noteMgr.selectedNoteObject.value.content.value"
+					v-model="selectedNoteObject.content.value"
 					rows="10"
 					style="width: 100%; resize: none;"
 				></textarea>
@@ -89,11 +89,59 @@
 <script setup>
 
 // vue
-import { ref, onMounted, inject } from 'vue';
+import { ref, onMounted, inject, computed, watch } from 'vue';
 
 // get our app & note manager state systems
 const app = inject('app');
 const noteMgr = app.noteMgr;
+
+
+// store the ID of the selected note & a computed property to get the note object
+const selectedNoteID = ref(1);
+const selectedNoteObject = computed(() => {
+	if (selectedNoteID.value === null)
+		return null;
+	return noteMgr.getNoteByID(selectedNoteID.value);
+});
+
+
+/**
+ * Select a note to edit.
+ * 
+ * @param {Object} note - The note to select.
+ */
+function selectNote(note) {
+	selectedNoteID.value = note.id;
+}
+
+
+/**
+ * Add a new note and select it.
+ */
+function addNote(){
+
+	const newNote = noteMgr.addNote();
+	selectedNoteID.value = newNote.id;
+}
+
+
+/**
+ * Delete a note.
+ * 
+ * @param {Object} note - The note to delete.
+ */
+function deleteNote(note){
+
+	// delete the note
+	selectedNoteID.value = null;
+	noteMgr.deleteNote(note);
+
+	// get the ID of the last note in the list,
+	// or null if no notes remain
+	const lastNoteID = noteMgr.notes.value.length > 1 ? 
+		noteMgr.notes.value[noteMgr.notes.value.length - 1].id : null;
+	selectedNoteID.value = lastNoteID;
+}
 
 </script>
 <style lang="scss" scoped>
