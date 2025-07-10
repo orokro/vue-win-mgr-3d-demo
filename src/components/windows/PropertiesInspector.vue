@@ -9,12 +9,12 @@
 	<!-- outermost wrapper -->
 	<div class="properties-inspector-window">
 
-		<div class="items-list">
+		<div class="items-list mac-bar">
 
 			<div class="list mac-bar">
 
 				<!-- No item selected -->
-				<div v-if="!selectedItem" class="no-selection">
+				<div v-if="!sceneMgr.selectedItem.item==null" class="no-selection">
 					Select an item to see and edit its properties
 				</div>
 
@@ -25,37 +25,37 @@
 					<div class="section-header">Properties</div>
 
 					<PropertyRow label="ID">
-						<input type="text" :value="selectedItem.id" readonly />
+						<input type="text" :value="sceneMgr.selectedItem.id.value" class="ro" readonly />
 					</PropertyRow>
 
 					<PropertyRow label="Name">
-						<input type="text" v-model="selectedItem.name.value" />
+						<input type="text" v-model="sceneMgr.selectedItem.name.value" />
 					</PropertyRow>
 
 					<PropertyRow label="Visible">
-						<input type="checkbox" v-model="selectedItem.mesh.visible" />
+						<input type="checkbox" v-model="sceneMgr.selectedItem.mesh.visible" />
 					</PropertyRow>
 
 					<!-- Transform Section -->
 					<div class="section-header">Transform</div>
 
-					<Vector3Row label="Position" :vector="selectedItem.mesh.position" />
-					<Vector3Row label="Rotation" :vector="selectedItem.mesh.rotation" isRotation />
-					<Vector3Row label="Scale" :vector="selectedItem.mesh.scale" />
+					<Vector3Row label="Position" :vector="sceneMgr.selectedItem.position" />
+					<Vector3Row label="Rotation" :vector="sceneMgr.selectedItem.rotation" isRotation />
+					<Vector3Row label="Scale" :vector="sceneMgr.selectedItem.scale" />
 
 					<!-- Material Section -->
 					<div class="section-header">Material</div>
 
 					<PropertyRow label="Color">
-						<input type="color" :value="selectedItem.mesh.material.color.getStyle()" @input="onColorInput($event)" />
+						<input type="color" :value="sceneMgr.selectedItem.color.value" @input="onColorInput($event)" />
 					</PropertyRow>
 
 					<PropertyRow label="Roughness">
-						<input type="range" min="0" max="1" step="0.01" v-model.number="selectedItem.mesh.material.roughness" />
+						<input type="range" min="0" max="1" step="0.01" v-model.number="sceneMgr.selectedItem.roughness.value" />
 					</PropertyRow>
 
 					<PropertyRow label="Metalness">
-						<input type="range" min="0" max="1" step="0.01" v-model.number="selectedItem.mesh.material.metalness" />
+						<input type="range" min="0" max="1" step="0.01" v-model.number="sceneMgr.selectedItem.metalness.value" />
 					</PropertyRow>
 
 				</template>
@@ -83,18 +83,12 @@ import Vector3Row from '../Vector3Row.vue';
 const app = inject('app');
 const sceneMgr = app.sceneMgr;
 
-// computed item from selection
-const selectedItem = computed(() => {
-	const id = sceneMgr.selectedItemID.value;
-	return id ? sceneMgr.getItemByID(id) : null;
-});
-
 // update material color from input
 function onColorInput(e) {
 
-	if (!selectedItem.value)
+	if (!sceneMgr.selectedItem.item==null)
 		return;
-	selectedItem.value.mesh.material.color.setStyle(e.target.value);
+		sceneMgr.selectedItem.color.value = (e.target.value);
 }
 
 </script>
@@ -108,7 +102,14 @@ function onColorInput(e) {
 		height: 100%;
 		background: lightgray;
 
+		.ro {
+			background: #CCC;
+			color: rgba(0, 0, 0, 0.75);
+			/* font-style: italic; */
+		}
+		
 		.items-list {
+
 			user-select: none;
 			-webkit-user-select: none;
 			position: absolute;
@@ -116,7 +117,13 @@ function onColorInput(e) {
 			background: rgba(0, 0, 0, 0.5);
 			border-right: 1px solid rgba(255, 255, 255, 0.2);
 
+			overflow-x: auto;
+
 			.list {
+
+				min-width: 320px;
+				/* border: 1px solid red; */
+
 				position: absolute;
 				inset: 10px 10px 10px 10px;
 				background: rgba(0, 0, 0, 0.7);

@@ -7,7 +7,7 @@
 -->
 <template>
 
-	<!-- main row outerwrapper -->
+	<!-- main row outer wrapper -->
 	<div class="property-row">
 
 		<div class="label">{{ label }}</div>

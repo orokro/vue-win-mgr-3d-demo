@@ -18,7 +18,7 @@ import App from "./App";
 import ThreeQuery from "three-query";
 
 // vue
-import { shallowRef, ref } from "vue";
+import { shallowRef, ref, watch } from "vue";
 
 // three
 import * as THREE from "three";
@@ -53,8 +53,23 @@ export default class SceneMgr {
 
 		this.lights.directionalLight.position.set(5, 10, 5);
 		this.lights.directionalLight.intensity = 2.5;
-		// keep track of a selected item ID, or null if nothing is selected
-		this.selectedItemID = ref(null);
+
+		// When an item is selected, we'll move it's properties from the ThreeJS Object3D to these
+		// Refs for the templates to bind to.
+		this.selectedItem = {
+			id: ref(null),
+			item: null,
+			name: ref(''),
+			mesh: null,
+			visible: ref(true),
+			position: { x: ref(0), y: ref(0), z: ref(0) },
+			rotation: { x: ref(0), y: ref(0), z: ref(0) },
+			scale: { x: ref(1), y: ref(1), z: ref(1) },
+			color: ref('#000000'),
+			roughness: ref(0.5),
+			metalness: ref(0.5),
+			wireframe: ref(false),
+		};
 
 		// keep track of the items we've added here
 		this.sceneItems = shallowRef([]);
@@ -64,6 +79,9 @@ export default class SceneMgr {
 
 		// add some demo data to start with
 		this.addDemoItems();
+
+		// watch for when our selection refs change
+		this.watchSelection();
 	}
 
 
@@ -99,6 +117,90 @@ export default class SceneMgr {
 
 
 	/**
+	 * Normalizes a questionable color input into a valid THREE.Color instance.
+	 * Accepts hex, rgb/rgba, named colors, integers, etc.
+	 * @param {string|number} questionableColor - The questionable input color
+	 * @returns {THREE.Color} A valid THREE.Color instance
+	 */
+	getThreeColor(questionableColor) {
+		if (questionableColor instanceof THREE.Color) {
+			return questionableColor;
+		}
+	
+		try {
+			// Handle integer input
+			if (typeof questionableColor === 'number') {
+				return new THREE.Color(questionableColor);
+			}
+	
+			if (typeof questionableColor !== 'string') {
+				throw new Error('Color must be a string or number');
+			}
+	
+			let colorStr = questionableColor.trim();
+	
+			// Handle hex without #
+			if (/^([0-9a-fA-F]{6}|[0-9a-fA-F]{3})$/.test(colorStr)) {
+				colorStr = `#${colorStr}`;
+				return new THREE.Color(colorStr);
+			}
+	
+			// Handle rgb/rgba
+			const rgbMatch = colorStr.match(/^rgba?\s*\((\d+),\s*(\d+),\s*(\d+)/i);
+			if (rgbMatch) {
+				const r = parseInt(rgbMatch[1]);
+				const g = parseInt(rgbMatch[2]);
+				const b = parseInt(rgbMatch[3]);
+				return new THREE.Color((r / 255), (g / 255), (b / 255));
+			}
+	
+			// Handle named colors or hex with #
+			return new THREE.Color(colorStr.toLowerCase());
+		} catch (err) {
+			console.warn(`Could not parse color "${questionableColor}": ${err.message}`);
+			return new THREE.Color(0x000000); // fallback to black
+		}
+	}
+	
+
+
+	/**
+	 * Watch all the refs for the refs & update the corresponding ThreeJS Object3D
+	 * 
+	 * NOTE: this is sloppy & lazy & there's better ways.
+	 * 
+	 * This is just a lazy way, because the point of this project is to show of
+	 * the window manager, and not the best way to manage a ThreeJS scene in Vue.
+	 */
+	watchSelection() {
+
+		const watchV3 = (refPos, key)=>{
+			watch(()=>refPos.x.value, (newX) => { this.selectedItem.mesh[key].x = newX;});
+			watch(()=>refPos.y.value, (newY) => { this.selectedItem.mesh[key].y = newY;});
+			watch(()=>refPos.z.value, (newZ) => { this.selectedItem.mesh[key].z = newZ;});
+		};
+
+		watch(this.selectedItem.name, (newName) => { 
+			this.selectedItem.item.name.value = newName; });
+		watch(this.selectedItem.visible, (newVisible) => {
+			this.selectedItem.item.mesh.visible = newVisible; });
+		watchV3(this.selectedItem.position, 'position');
+		watchV3(this.selectedItem.rotation, 'rotation');
+		watchV3(this.selectedItem.scale, 'scale');
+		watch(this.selectedItem.color, (newColor) => {
+			newColor = this.getThreeColor(newColor);
+			this.selectedItem.item.mesh.material.color.set(newColor); });
+		watch(this.selectedItem.roughness, (newRoughness) => {
+			this.selectedItem.item.mesh.material.roughness = newRoughness; });
+		watch(this.selectedItem.metalness, (newMetalness) => {
+			this.selectedItem.item.mesh.material.metalness = newMetalness; });
+		watch(this.selectedItem.wireframe, (newWireframe) => {
+			this.selectedItem.item.mesh.material.wireframe = newWireframe;
+		});
+	}
+
+
+	/**
 	 * Selects item
 	 * 
 	 * @param {Object|Number} itemOrID - Item object or ID to select
@@ -108,11 +210,33 @@ export default class SceneMgr {
 
 		const id = typeof itemOrID === "object" ? itemOrID.id : parseInt(itemOrID, 10);
 		const item = this.sceneItems.value.find(i => i.id === id);
+
+		const v32obj = (obj, v3) => {
+			obj.x.value = v3.x;
+			obj.y.value = v3.y;
+			obj.z.value = v3.z;
+		};
+
 		if(!item) {
-			this.selectedItemID.value = null;
+
+			this.selectedItem.id = null;
+			this.selectedItem.item = null;
 			return false;
 		}
-		this.selectedItemID.value = id;
+
+		// copy item to our refs for the UI
+		this.selectedItem.item = item;
+		this.selectedItem.mesh = item.mesh;
+		this.selectedItem.id.value = item.id;		
+		this.selectedItem.name.value = item.name.value;		
+		this.selectedItem.visible.value = item.mesh.visible;
+		v32obj(this.selectedItem.position, item.mesh.position);
+		v32obj(this.selectedItem.rotation, item.mesh.rotation);
+		v32obj(this.selectedItem.scale, item.mesh.scale);
+		this.selectedItem.color.value = '#' + item.mesh.material.color.getHexString();
+		this.selectedItem.roughness.value = item.mesh.material.roughness;	
+		this.selectedItem.metalness.value = item.mesh.material.metalness;
+		this.selectedItem.wireframe.value = item.mesh.material.wireframe;
 		return true;
 	}
 
@@ -123,8 +247,10 @@ export default class SceneMgr {
 	 * @returns {Boolean} - Returns true if an item is selected, false otherwise
 	 */
 	selectNone(){
+
 		// clear selection & GTFO
-		this.selectedItemID.value = null;
+		this.selectedItem.id.value = null;
+		this.selectedItem.item.value = null;
 		return true;
 	}
 

@@ -37,6 +37,7 @@ body {
 
 .mac-bar::-webkit-scrollbar {
 	width: 8px;
+	height: 8px;
 }
 .mac-bar::-webkit-scrollbar-thumb {
 	background: rgba(230, 230, 230, 0.5);

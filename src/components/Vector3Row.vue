@@ -15,11 +15,15 @@
 		<div class="label">{{ label }}</div>
 		<div class="value vector3">
 
-			<label v-for="axis in ['x', 'y', 'z']" :key="axis" class="vector-input">
+			<label 
+				v-for="axis in ['x', 'y', 'z']"
+				:key="axis"
+				class="vector-input"
+			>
 				{{ axis }}:
 				<input
 					type="text"
-					v-model="inputs[axis]"
+					v-model="vector[axis].value"
 					:class="{ invalid: !valid[axis] }"
 					@blur="onBlur(axis)"
 					@mousedown="(e) => startDrag(e, axis)"
@@ -43,29 +47,16 @@ const props = defineProps({
 	isRotation: Boolean
 });
 
-const inputs = {
-	x: ref(''),
-	y: ref(''),
-	z: ref('')
-};
-
 const valid = {
 	x: ref(true),
 	y: ref(true),
 	z: ref(true)
 };
 
-// update input boxes from the vector
-function syncInputs() {
-	for (const axis of ['x', 'y', 'z']) {
-		inputs[axis].value = props.vector[axis].toFixed(3);
-		valid[axis].value = true;
-	}
-}
-onMounted(syncInputs);
-watch(() => props.vector, syncInputs, { deep: true });
-
 function onBlur(axis) {
+
+	return;
+
 	const val = parseFloat(inputs[axis].value);
 	if (isNaN(val)) {
 		// reset to current vector val
@@ -77,9 +68,10 @@ function onBlur(axis) {
 }
 
 function startDrag(e, axis) {
+
 	e.preventDefault();
 	const startX = e.clientX;
-	const startVal = props.vector[axis];
+	const startVal = parseFloat(props.vector[axis].value);
 	const ctrl = e.ctrlKey;
 	const shift = e.shiftKey;
 
@@ -89,8 +81,7 @@ function startDrag(e, axis) {
 		const dx = ev.clientX - startX;
 		const delta = dx * step;
 		const newVal = startVal + delta;
-		props.vector[axis] = newVal;
-		inputs[axis].value = newVal.toFixed(3);
+		props.vector[axis].value = newVal.toFixed(3);
 		valid[axis].value = true;
 	};
 
@@ -102,14 +93,6 @@ function startDrag(e, axis) {
 	window.addEventListener('mousemove', onMove);
 	window.addEventListener('mouseup', onUp);
 }
-
-watch(inputs, (newVals) => {
-	for (const axis of ['x', 'y', 'z']) {
-		const parsed = parseFloat(newVals[axis]);
-		valid[axis].value = !isNaN(parsed);
-		if (!isNaN(parsed)) props.vector[axis] = parsed;
-	}
-}, { deep: true });
 
 </script>
 <style lang="scss" scoped>

@@ -22,7 +22,7 @@
 					v-for="item in sceneMgr.sceneItems.value"
 					:key="item.id"
 					class="scene-item"
-					:class="{ selected: sceneMgr.selectedItemID.value === item.id }"
+					:class="{ selected: sceneMgr.selectedItem.id.value === item.id }"
 					@click="sceneMgr.selectItem(item)"
 				>
 					<!-- item title -->
@@ -148,7 +148,7 @@ const sceneMgr = app.sceneMgr;
 
 						// for debug
 						/* border: 1px solid red; */
-						
+
 					}// .item-title
 
 					&:hover {
