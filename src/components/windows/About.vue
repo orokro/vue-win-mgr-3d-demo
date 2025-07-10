@@ -84,7 +84,8 @@ import { ref, inject } from 'vue';
 
 			// lighter box / styling
 			background: #d6d6d6;
-			height: 100%;			
+			height: 100%;		
+				
 			// box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.5);
 			// border: 1px solid black;
 			border-radius: 5px;

@@ -148,6 +148,7 @@ const sceneMgr = app.sceneMgr;
 
 						// for debug
 						/* border: 1px solid red; */
+						
 					}// .item-title
 
 					&:hover {

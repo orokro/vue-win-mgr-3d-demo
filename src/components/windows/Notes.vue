@@ -108,9 +108,8 @@ const noteMgr = app.noteMgr;
 		height: 100%;
 
 		// notes box styles
-		// background: lightgray;
 		background: rgb(105, 105, 105);
-		// background: red;
+
 		// for debug
 		/* border: 1px solid rgba(255, 255, 255, .2); */
 		
@@ -133,13 +132,13 @@ const noteMgr = app.noteMgr;
 			// header fixed on top
 			.header {
 
+				// for debug
+				/* border-bottom: 1px solid rgba(255, 255, 255, 0.2); */
+
 				// fixed on top of left column
 				position: absolute;
 				inset: 0px 0px auto 0px;
 				height: 30px;
-
-				// for debug
-				/* border-bottom: 1px solid rgba(255, 255, 255, 0.2); */
 
 				// text settings
 				color: #EFEFEF;
@@ -204,6 +203,7 @@ const noteMgr = app.noteMgr;
 
 						// for debug
 						/* border: 1px solid red; */
+
 					}// .note-title
 
 					&:hover {

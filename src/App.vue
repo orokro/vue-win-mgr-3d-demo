@@ -3,6 +3,14 @@
 	-------
 
 	The main entry component for the application.
+
+	In this top-level root component we'll:
+	- Instantiate our App class, which is the main state for the application
+	- Import all the components that are used as windows in the app
+	- Define our available windows, including names, slugs, components, and icons
+	- Define a layout for the windows in the app
+	- Set up everything with a simple WindowManager component from the library, in our Template
+	- Disable right clicking
 -->
 <template>
 	
@@ -69,6 +77,7 @@ const app = new App();
 // we'll provide the app for dependency injection in whatever windows mount
 provide('app', app);
 
+
 // list of windows to allow in our WindowManager
 const availableWindows = [
 	{
@@ -108,9 +117,9 @@ const availableWindows = [
 	}
 ];
 
+
 // build a layout to test with
 const layout  = [
-
 	{	
 		// we'll build layout in hypothetical 1080P space
 		name: "window",
@@ -135,7 +144,6 @@ const layout  = [
 		windows: ['assets', 'notes',], 
 		left: 0,
 		style: FRAME_STYLE.TABBED,
-		//left: ["ref", "VerticalToolBar.right"],
 		right: ["ref", "MainView.right"],
 		top: ["ref", "MainView.bottom"],
 		bottom: ["ref", "window.bottom"]
@@ -168,12 +176,6 @@ const layout  = [
  */
 function disableContextMenus(event){
 
-	// return;
-
-	// if a parent element enable right click, we're good
-	// if(checkParentsForClass(event.target, 'rightclick_allowed')!=false)
-	// 	return;
-
 	if(event.shiftKey==false){
 		event.preventDefault();
 		return false;
@@ -189,6 +191,7 @@ onMounted(() => {
 	const ctx = windowManagerEl.value?.getContext();
 	window.wctx = ctx;
 });
+
 
 </script>
 <style lang="scss" scoped>
