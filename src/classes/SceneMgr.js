@@ -55,6 +55,17 @@ export default class SceneMgr {
 		this.lights.directionalLight.position.set(5, 10, 5);
 		this.lights.directionalLight.intensity = 2.5;
 
+		// add some helpers
+
+		// add grid and axes (hidden by default)
+		this.gridHelper = new THREE.GridHelper(10, 10);
+		this.gridHelper.visible = false;
+		this.scene.add(this.gridHelper);
+
+		this.axesHelper = new THREE.AxesHelper(2);
+		this.axesHelper.visible = false;
+		this.scene.add(this.axesHelper);
+
 		// add HDR environment map
 		this.loadHDR();
 
@@ -187,6 +198,29 @@ export default class SceneMgr {
 		// Enable transparency when HDR is hidden
 		if (this.threeBits?.renderer) {
 			this.threeBits.renderer.setClearAlpha(show ? 1.0 : 0.0);
+		}
+	}
+
+
+	/**
+	 * Show or hide the grid helper.
+	 * 
+	 * @param {Boolean} on - Whether to show the grid
+	 */
+	showGrid(on = true) {
+		if (this.gridHelper) {
+			this.gridHelper.visible = on;
+		}
+	}
+
+	/**
+	 * Show or hide the axes helper.
+	 * 
+	 * @param {Boolean} on - Whether to show the axes
+	 */
+	showAxes(on = true) {
+		if (this.axesHelper) {
+			this.axesHelper.visible = on;
 		}
 	}
 

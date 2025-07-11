@@ -9,7 +9,7 @@
 // vue
 import { onMounted, ref, inject } from 'vue';
 import * as THREE from 'three';
-import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
+
 
 // lib/misc
 import ThreeQuery from 'three-query';

@@ -48,6 +48,14 @@ export default class SettingsMgr {
 	setUpWatches(){
 
 		// 3d items
+		watch(
+			()=>this.showGrids.value, (newValue)=>{
+			this.app.sceneMgr.showGrid(newValue);
+		}, { immediate: true });
+		watch(
+			()=>this.showAxes.value, (newValue)=>{
+			this.app.sceneMgr.showAxes(newValue);
+		}, { immediate: true });
 
 		// lighting
 		watch(
