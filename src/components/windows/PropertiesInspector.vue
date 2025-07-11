@@ -33,7 +33,11 @@
 					</PropertyRow>
 
 					<PropertyRow label="Visible">
-						<input type="checkbox" v-model="sceneMgr.selectedItem.mesh.visible" />
+						<input type="checkbox" v-model="sceneMgr.selectedItem.visible.value" />
+					</PropertyRow>
+
+					<PropertyRow label="Wireframe">
+						<input type="checkbox" v-model="sceneMgr.selectedItem.wireframe.value" />
 					</PropertyRow>
 
 					<!-- Transform Section -->

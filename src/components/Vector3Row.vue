@@ -21,11 +21,8 @@
 				class="vector-input"
 			>
 				{{ axis }}:
-				<input
-					type="text"
+				<FloatInput
 					v-model="vector[axis].value"
-					:class="{ invalid: !valid[axis] }"
-					@blur="onBlur(axis)"
 					@mousedown="(e) => startDrag(e, axis)"
 					style="cursor: ns-resize"
 				/>
@@ -40,48 +37,40 @@
 // vue
 import { ref, watch, onMounted } from 'vue';
 
+// components
+import FloatInput from './FloatInput.vue';
 
+// define our props
 const props = defineProps({
 	label: String,
 	vector: Object,
 	isRotation: Boolean
 });
 
+// true when our inputs are valid
 const valid = {
 	x: ref(true),
 	y: ref(true),
 	z: ref(true)
 };
 
-function onBlur(axis) {
-
-	return;
-
-	const val = parseFloat(inputs[axis].value);
-	if (isNaN(val)) {
-		// reset to current vector val
-		inputs[axis].value = props.vector[axis].toFixed(3);
-		valid[axis].value = true;
-	} else {
-		props.vector[axis] = val;
-	}
-}
 
 function startDrag(e, axis) {
 
-	e.preventDefault();
+	// e.preventDefault();
 	const startX = e.clientX;
 	const startVal = parseFloat(props.vector[axis].value);
-	const ctrl = e.ctrlKey;
-	const shift = e.shiftKey;
-
-	const step = ctrl ? 0.1 : shift ? 0.01 : 0.5;
-
+	
 	const onMove = (ev) => {
+
+		const ctrl = ev.ctrlKey;
+		const shift = ev.shiftKey;
+		const step = ctrl ? 0.001 : shift ? 0.01 : 0.1;
+
 		const dx = ev.clientX - startX;
 		const delta = dx * step;
 		const newVal = startVal + delta;
-		props.vector[axis].value = newVal.toFixed(3);
+		props.vector[axis].value = parseFloat(newVal.toFixed(3));
 		valid[axis].value = true;
 	};
 
@@ -97,6 +86,7 @@ function startDrag(e, axis) {
 </script>
 <style lang="scss" scoped>
 
+	// main row styles
 	.property-row {
 
 		display: flex;
@@ -126,8 +116,8 @@ function startDrag(e, axis) {
 		}// .vector-input
 
 		input {
-			width: 50px;
-			text-align: right;
+			width: 45px;
+			text-align: center;
 			padding: 3px 6px;
 			border-radius: 3px;
 			border: none;
