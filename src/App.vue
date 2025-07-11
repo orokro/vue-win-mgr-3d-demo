@@ -87,36 +87,43 @@ const availableWindows = [
 		window: Viewport,
 		title: "Scene Viewport",
 		slug: "viewport",
+		icon: '/img/icons/viewport.png',
 	},
 	{
 		window: Notes,
 		title: "Notes",
 		slug: "notes",
+		icon: '/img/icons/notes.png',
 	},
 	{
 		window: SceneList,
 		title: "Scene Items",
 		slug: "scene-list",
+		icon: '/img/icons/scene_list.png',
 	},
 	{
 		window: Assets,
 		title: "Assets",
 		slug: "assets",
+		icon: '/img/icons/assets.png',
 	},
 	{
 		window: PropertiesInspector,
 		title: "Properties Inspector",
 		slug: "properties-inspector",
+		icon: '/img/icons/properties.png',
 	},
 	{
 		window: About,
 		title: "About This App",
 		slug: "about",
+		icon: '/img/icons/about.png',
 	},
 	{
 		window: Settings,
 		title: "Settings",
 		slug: "settings",
+		icon: '/img/icons/settings.png',
 	}
 ];
 
