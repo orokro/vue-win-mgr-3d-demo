@@ -56,7 +56,9 @@
 
 					<div class="property-group">
 						<PropertyRow label="Color">
-							<input type="color" :value="sceneMgr.selectedItem.color.value" @input="onColorInput($event)" />
+							<div class="colorInputWrapper">
+								<input type="color" :value="sceneMgr.selectedItem.color.value" @input="onColorInput($event)" />
+							</div>
 						</PropertyRow>
 
 						<PropertyRow label="Roughness">
@@ -67,7 +69,7 @@
 							<input type="range" min="0" max="1" step="0.01" v-model.number="sceneMgr.selectedItem.metalness.value" />
 						</PropertyRow>
 					</div>
-					
+
 				</template>
 
 			<!-- /.list -->
@@ -160,7 +162,6 @@ function onColorInput(e) {
 				color: white;
 				font-size: 14px;
 
-
 				.no-selection {
 					padding: 10px;
 					color: #ccc;
@@ -175,86 +176,121 @@ function onColorInput(e) {
 
 				}// .section-header
 
-				.property-row {
+				// group resets the nth-child styles
+				.property-group {
 
-					display: flex;
-					align-items: center;
-					padding: 8px 0;
-					
-					
-					margin-bottom: 0px;
+					// our rows of properties
+					.property-row {
 
-					// toggle background color for rows
-					background: rgba(255, 255, 255, 0.15);
-					&:nth-child(even) {
-						background: rgba(255, 255, 255, 0.2);
-
-					}// &:nth-child(even)
-
-					// only round first/last row
-					border-radius: 0px;
-					&:first-child {
-						border-radius: 4px 4px 0px 0px;
-					}
-					&:last-child {
-						border-radius: 0px 0px 4px 4px;
-					}
-					
-
-					.label {
-						width: 100px;
-						padding-left: 10px;
-
-					}// .label
-
-					.value {
-						flex: 1;
 						display: flex;
-						flex-wrap: wrap;
-
-						input[type='text'],
-						input[type='range'],
-						input[type='color'] {
-							margin-left: 8px;
-							padding: 3px 6px;
-							border-radius: 3px;
-							border: none;
-							accent-color: #00ABAE;
-						}
-
-						input[type='checkbox'] {
-							accent-color: #00abae;
-							margin-left: 6px;
-							transform: scale(1.2);
-						}
-
-						.vector3 {
-
-							display: flex;
-							gap: 6px;
-
-							.vector-input {
-								display: flex;
-								align-items: center;
-								gap: 4px;
-
-								input {
-									width: 50px;
-									text-align: right;
-									
-								}
-
-								.invalid {
-									background: #ffaaaa;
-								}
-
-							}// .vector-input
-
-						}// .vector3
+						align-items: center;
+						padding: 8px 0;
 						
-					}// .value
+						
+						margin-bottom: 0px;
 
-				}// .property-row
+						// toggle background color for rows
+						background: rgba(255, 255, 255, 0.15);
+						&:nth-child(even) {
+							background: rgba(255, 255, 255, 0.2);
+
+						}// &:nth-child(even)
+
+						// only round first/last row
+						border-radius: 0px;
+						&:first-child {
+							border-radius: 4px 4px 0px 0px;
+						}
+						&:last-child {
+							border-radius: 0px 0px 4px 4px;
+						}
+						
+
+						.label {
+							width: 100px;
+							padding-left: 10px;
+
+						}// .label
+
+						.value {
+							flex: 1;
+							display: flex;
+							flex-wrap: wrap;
+
+							input[type='text'],
+							input[type='range'],
+							input[type='color'] {
+								margin-left: 8px;
+								padding: 3px 6px;
+								border-radius: 3px;
+								border: none;
+								accent-color: #00ABAE;
+							}
+
+							input[type='checkbox'] {
+								accent-color: #00abae;
+								margin-left: 6px;
+								transform: scale(1.2);
+							}
+
+							// wrap the color input so we can get rid of the uggo border
+							.colorInputWrapper {
+
+								// for absolute positioning of the color input
+								position: relative;
+
+								// allow nothing to escape so we can clip the uggo border on the input	
+								overflow: clip;
+
+								// fixed size box
+								width: 40px;
+								height: 20px;								
+								margin-left: 8px;
+								border: 2px solid black;
+								border-radius: 5px;
+
+								// make the input bigger than our container, so we clip it's ugly border
+								input[type='color'] {
+									
+									// deliberately larger than the wrapper
+									position:absolute;
+									inset: -10px -10px -10px -20px;
+									width: 60px;
+									height: 40px;
+									cursor: pointer;
+								}
+
+							}// .colorInputWrapper
+
+							.vector3 {
+
+								display: flex;
+								gap: 6px;
+
+								.vector-input {
+									display: flex;
+									align-items: center;
+									gap: 4px;
+
+									input {
+										width: 50px;
+										text-align: right;
+										
+									}
+
+									.invalid {
+										background: #ffaaaa;
+									}
+
+								}// .vector-input
+
+							}// .vector3
+							
+						}// .value
+
+					}// .property-row
+
+				}// .property-group
 
 			}// .list
 
