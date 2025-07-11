@@ -96,8 +96,18 @@ onMounted(()=>{
 	viewportContainerEl.value[DROP_RECEIVER] = {
 		
 		// when we drop an item on this element, we add it to the scene
-		drop: (item) => {
-			app.sceneMgr.addItem(item.name);
+		drop: (item, cursorPos) => {
+
+			// raycast to find a point to add the item at
+			const point = viewportScene.value.getRaycastPoint(cursorPos.x, cursorPos.y);
+
+			// add the item
+			const newItem = app.sceneMgr.addItem(item.name);
+
+			// if point is not null, set the items position
+			if (point) {
+				newItem.mesh.position.set(point.x, point.y+0.5, point.z);
+			}
 		}
 	};
 

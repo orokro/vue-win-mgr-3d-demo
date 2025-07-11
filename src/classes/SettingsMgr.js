@@ -28,7 +28,7 @@ export default class SettingsMgr {
 		this.showAxes = ref(true);
 		
 		// background settings
-		this.backgroundColor = ref("#000000");
+		this.backgroundColor = ref("#333333");
 		this.showHDRBackground = ref(false);
 		
 		// lighting settings

@@ -203,6 +203,32 @@ export default class ViewportScene {
 
 
 	/**
+	 * Check for a place to drop an object in the scene.
+	 * 
+	 * @param {Number} cursorX - the X coordinate of the cursor, on the screen
+	 * @param {Number} cursorY - the Y coordinate of the cursor, on the screen
+	 * @returns {THREE.Vector3|null} - the point in 3D space that the cursor is pointing at, or null if no intersection	
+	 */
+	getRaycastPoint(cursorX, cursorY) {
+
+		const el = this.containerElement
+		const camera = this.orbit.value ? this.orbitCamera : this.staticCamera;
+		const scene = this.scene;
+
+		const rect = el.getBoundingClientRect();
+	
+		const ndcX = ((cursorX - rect.left) / rect.width) * 2 - 1;
+		const ndcY = -((cursorY - rect.top) / rect.height) * 2 + 1;
+	
+		const raycaster = new THREE.Raycaster();
+		raycaster.setFromCamera(new THREE.Vector2(ndcX, ndcY), camera);
+	
+		const intersects = raycaster.intersectObjects(scene.children, true);
+		return intersects.length > 0 ? intersects[0].point.clone() : null;
+	}
+
+
+	/**
 	 * Starts the render loop for the scene.
 	 */
 	startRenderLoop(){
