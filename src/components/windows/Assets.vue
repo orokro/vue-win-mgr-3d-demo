@@ -154,7 +154,7 @@ function startDrag(event, item){
 			const result = getDropReceiver(cursorPos.x, cursorPos.y);
 
 			if(result!=null){
-				result.receiver.drop(item);
+				result.receiver.drop(item, cursorPos);
 			}
 
 			isDraggingItem.value = false;
@@ -176,7 +176,8 @@ function getDropReceiver(x, y) {
 
 	while (el && el !== document.body) {
 
-		if (el.hasAttribute('data-drop-target')) {
+		// if (el.hasAttribute('data-drop-target')) {
+		if(el[DROP_RECEIVER]){
 			return { el, receiver: el[DROP_RECEIVER] };
 		}
 		el = el.parentElement;

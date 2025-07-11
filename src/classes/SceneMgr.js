@@ -62,6 +62,16 @@ export default class SceneMgr {
 		this.gridHelper.visible = false;
 		this.scene.add(this.gridHelper);
 
+		// add a plane that can be raycast to for the grid
+		// Create an invisible plane that matches the grid
+		this.gridPlane = new THREE.Mesh(
+			new THREE.PlaneGeometry(10, 10),
+			new THREE.MeshBasicMaterial({ visible: false })
+		);
+		this.gridPlane.rotateX(-Math.PI / 2);
+		this.scene.add(this.gridPlane);
+		
+		// add RGB axes helper (hidden by default)
 		this.axesHelper = new THREE.AxesHelper(2);
 		this.axesHelper.visible = false;
 		this.scene.add(this.axesHelper);

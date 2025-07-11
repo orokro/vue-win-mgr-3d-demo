@@ -76,6 +76,10 @@ const props = defineProps({
 	}
 });
 
+// symbol to mark elements that can receive drops
+const DROP_RECEIVER = ('drop-receiver');
+
+// variable to bind to the select box
 const initialSide = ref(props.side);
 
 
@@ -89,21 +93,33 @@ onMounted(()=>{
 	// set the camera to the default view
 	viewportScene.value.setCamera(props.side);
 
+	viewportContainerEl.value[DROP_RECEIVER] = {
+		
+		// when we drop an item on this element, we add it to the scene
+		drop: (item) => {
+			app.sceneMgr.addItem(item.name);
+		}
+	};
+
 });
 
 const showOrbit = computed(() => {
-  return viewportScene.value?.orbit?.value === true;
+	return viewportScene.value?.orbit?.value === true;
 });
-
 
 
 // clean up when we unmount
 onUnmounted(()=>{
 
 	// destroy the viewport scene
-	if (viewportScene) {
-		viewportScene.destruct();
-		viewportScene = null;
+	if (viewportScene.value!==null) {
+		viewportScene.value.destruct();
+		viewportScene.value = null;
+	}
+
+	// clean up the drop receiver when we unmount
+	if (viewportContainerEl.value) {
+		delete viewportContainerEl.value[DROP_RECEIVER];
 	}
 
 });

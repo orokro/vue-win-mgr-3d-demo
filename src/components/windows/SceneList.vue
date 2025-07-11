@@ -12,7 +12,7 @@
 	<div class="scene-list-window">
 
 		<!-- column of items in the scene -->
-		<div ref="dropEl" data-drop-target="true" class="items-list">
+		<div ref="dropEl" class="items-list">
 
 			<!-- list box containing the items & add button -->
 			<div class="list mac-bar">
@@ -68,13 +68,12 @@ const DROP_RECEIVER = ('drop-receiver');
 onMounted(()=> {
 
 	dropEl.value[DROP_RECEIVER] = {
+
 		// when we drop an item on this element, we add it to the scene
 		drop: (item) => {
 			sceneMgr.addItem(item.name);
 		}
 	};
-
-	console.log(dropEl.value, dropEl.value[DROP_RECEIVER])
 });
 
 onUnmounted(() => {
