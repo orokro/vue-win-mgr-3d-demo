@@ -14,7 +14,7 @@
 			<div class="list mac-bar">
 
 				<!-- No item selected -->
-				<div v-if="!sceneMgr.selectedItem.item==null" class="no-selection">
+				<div v-if="sceneMgr.selectedItem.id.value==null" class="no-selection">
 					Select an item to see and edit its properties
 				</div>
 

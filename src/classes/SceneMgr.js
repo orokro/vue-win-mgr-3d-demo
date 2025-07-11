@@ -434,6 +434,9 @@ export default class SceneMgr {
 		if(toRemove.mesh.geometry) toRemove.mesh.geometry.dispose();
 		if(toRemove.mesh.material) toRemove.mesh.material.dispose();
 
+		// clear selection
+		this.selectNone();
+
 		// Remove from our state list & fire event
 		this.sceneItems.value = this.sceneItems.value.filter(i => i.id !== id);
 		this.emitEvent('items-removed', this.sceneItems.value);
