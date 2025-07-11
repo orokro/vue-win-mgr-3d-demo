@@ -9,6 +9,7 @@
 // vue
 import { onMounted, ref, inject } from 'vue';
 import * as THREE from 'three';
+import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
 
 // lib/misc
 import ThreeQuery from 'three-query';
@@ -88,6 +89,8 @@ export default class ViewportScene {
 			resizeObserver
 		} = this.threeBits
 		
+		// add HDR environment map
+		this.loadHDR(); // loads the HDR environment lighting
 
 		// the scene will come with an orbit camera, but we'll also make a static camera
 		this.orbitCamera = camera;
@@ -156,6 +159,52 @@ export default class ViewportScene {
 		this.staticCamera.position.set(0, 0, 0);
 		this.staticCamera.position[config.axis] = config.dir * distance;	
 		this.staticCamera.lookAt(0, 0, 0);
+	}
+
+
+	/**
+	 * Loads an HDR environment map and applies it to the scene.
+	 * 
+	 * @param {String} path - Path to the HDR file
+	 */
+	async loadHDR(path = '/img/hdr/venice_sunset_1k.hdr') {
+
+		const loader = new RGBELoader();
+
+		return new Promise((resolve, reject) => {
+			loader.load(path, (hdrEquirect) => {
+
+				hdrEquirect.mapping = THREE.EquirectangularReflectionMapping;
+
+				this.scene.environment = hdrEquirect;
+				this.scene.background = hdrEquirect;
+
+				this.hdrTexture = hdrEquirect; // store it for future updates
+				this.setHDRIntensity(1); // default intensity
+
+				resolve(hdrEquirect);
+			}, undefined, reject);
+		});
+	}
+
+
+	/**
+	 * Updates the intensity of the HDR environment map.
+	 * 
+	 * @param {Number} intensity - Intensity multiplier for environment lighting
+	 */
+	setHDRIntensity(intensity) {
+
+		if (!this.scene.environment)
+			return;
+
+		// Traverse scene and update environment intensity on mesh materials if supported
+		this.scene.traverse((child) => {
+			if (child.isMesh && child.material && 'envMapIntensity' in child.material) {
+				child.material.envMapIntensity = intensity;
+				child.material.needsUpdate = true;
+			}
+		});
 	}
 
 
