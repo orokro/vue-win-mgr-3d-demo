@@ -121,7 +121,7 @@ export default class ViewportScene {
 	 * @param {String} side - case-insensitive side name like "top/bottom/left/right/front/back/free"
 	 * @param {Number} distance - distance from the origin to the camera (default 10)
 	 */
-	setCamera(side, distance = 10) {
+	setCamera(side, distance = 5) {
 	
 		// make sure string is uppercase
 		const normalizedSide = side.toUpperCase();
@@ -133,7 +133,7 @@ export default class ViewportScene {
 		}
 		
 		// all other views have orbit off
-		orbit.value = false;
+		this.orbit.value = false;
 	
 		// Map of sides to axis and direction
 		const sideMap = {
