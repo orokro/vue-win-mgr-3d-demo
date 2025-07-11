@@ -13,6 +13,7 @@ import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
 
 // lib/misc
 import ThreeQuery from 'three-query';
+import App from './App';
 
 // main class export
 export default class ViewportScene {
@@ -20,12 +21,14 @@ export default class ViewportScene {
 	/**
 	 * Constructor for the ViewportScene class.
 	 * 
+	 * @param {App} app - the main App instance
 	 * @param {Object} scene - the ThreeJS scene object to use
 	 * @param {Element} containerElement - the element to mount the ThreeJS scene to
 	 */
-	constructor(scene, containerElement){
+	constructor(app, scene, containerElement){
 
-		// save pre-existing scene set up in our state
+		// save app and our pre-existing scene set up in our state
+		this.app = app;
 		this.scene = scene;
 
 		// save the element we'll mount to
@@ -39,6 +42,9 @@ export default class ViewportScene {
 
 		// build our scene
 		this.buildScene();
+
+		// set up watches on the settings 
+		this.settingsWatches = this.app.settingsMgr.registerWatches(this);
 
 		// kick off the render loop
 		this.startRenderLoop();
@@ -60,6 +66,11 @@ export default class ViewportScene {
 		// stop the render loop
 		this.stopRenderLoop();
 
+		// stop all the watches from the settings manager
+		if (this.settingsWatches) {
+			this.settingsWatches.forEach(stopWatch => stopWatch());
+			this.settingsWatches = null;
+		}
 	}
 	
 
@@ -189,7 +200,7 @@ export default class ViewportScene {
 
 				// hidden by default
 				this.showHDR(false);
-				
+
 				resolve(hdrEquirect);
 
 			}, undefined, reject);
@@ -233,6 +244,33 @@ export default class ViewportScene {
 		// Enable transparency when HDR is hidden
 		if (this.threeBits?.renderer) {
 			this.threeBits.renderer.setClearAlpha(show ? 1.0 : 0.0);
+		}
+	}
+
+
+	/**
+	 * Turns all lights in the scene on or off, including HDR lighting and manual lights.
+	 * 
+	 * @param {Boolean} on - Whether to enable all lights
+	 */
+	toggleLights(on = true) {
+
+		// Manual lights
+		if (this.threeBits?.lights) {
+			const { ambientLight, directionalLight } = this.threeBits.lights;
+
+			console.log("aids")
+			if (ambientLight) 
+				ambientLight.visible = on;
+			if (directionalLight)
+				directionalLight.visible = on;
+		}
+
+		// HDR lighting
+		if (on) {
+			this.scene.environment = this.hdrTexture || null;
+		} else {
+			this.scene.environment = null;
 		}
 	}
 

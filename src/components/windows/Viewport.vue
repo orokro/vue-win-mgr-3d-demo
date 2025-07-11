@@ -15,7 +15,13 @@
 	<div class="viewport-window">
 
 		<!-- we'll mount the ThreeJS renderer canvas in this element -->
-		<div ref="viewportContainerEl" class="container"></div>
+		<div 
+			ref="viewportContainerEl"
+			class="container"
+			:style="{
+				background: app.settingsMgr.backgroundColor.value || 'black',
+			}"
+		></div>
 
 		<!-- a select combo for view modes -->
 		<div class="view-mode-select">
@@ -53,6 +59,8 @@ const viewportContainerEl = ref(null);
 
 // take the initial side as a property
 const props = defineProps({
+
+	// initial side to start with
 	side: {
 		type: String,
 		default: 'free'
@@ -65,7 +73,7 @@ let viewportScene = null;
 onMounted(()=>{
 
 	// create a new ViewportScene instance
-	viewportScene = new ViewportScene(scene, viewportContainerEl.value);
+	viewportScene = new ViewportScene(app, scene, viewportContainerEl.value);
 
 	// set the camera to the default view
 	viewportScene.setCamera(props.side);

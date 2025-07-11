@@ -51,6 +51,7 @@ import About from './components/windows/About.vue';
 import SceneList from './components/windows/SceneList.vue';
 import Assets from './components/windows/Assets.vue';
 import PropertiesInspector from './components/windows/PropertiesInspector.vue';
+import Settings from './components/windows/Settings.vue';
 
 // other components
 import HeaderBar from './components/HeaderBar.vue';
@@ -111,7 +112,7 @@ const availableWindows = [
 		slug: "about",
 	},
 	{
-		window: About,
+		window: Settings,
 		title: "Settings",
 		slug: "settings",
 	}
@@ -160,7 +161,7 @@ const layout  = [
 	{
 		// Properties inspector, on right by default
 		name: "propertiesInspector",
-		windows: ['properties-inspector'], 
+		windows: ['settings', 'properties-inspector'], 
 		style: FRAME_STYLE.TABBED,
 		left: ["ref", "MainView.right"],
 		right: ["ref", "window.right"],
