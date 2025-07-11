@@ -7,9 +7,15 @@
 */
 
 // vue
-import { onMounted, ref, inject } from 'vue';
-import * as THREE from 'three';
+import { onMounted, ref, inject, watch } from 'vue';
 
+// three
+import * as THREE from 'three';
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
+import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass.js';
+import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
+import { GammaCorrectionShader } from 'three/addons/shaders/GammaCorrectionShader.js';
 
 // lib/misc
 import ThreeQuery from 'three-query';
@@ -91,7 +97,6 @@ export default class ViewportScene {
 
 		// save bits
 		const {
-			scene,
 			renderer,
 			camera,
 			controls,
@@ -100,9 +105,42 @@ export default class ViewportScene {
 			resizeObserver
 		} = this.threeBits
 		
+
+		// set up render pass for selection outlines
+		this.composer = new EffectComposer(renderer);
+
+		// required, base pass that effects render on top of
+		this.renderPass = new RenderPass(this.scene, camera);
+
+		// this renders the outline
+		this.outlinePass = new OutlinePass(
+			new THREE.Vector2(container.clientWidth, container.clientHeight), 
+			this.scene, camera
+		);
+		this.outlinePass.edgeStrength = 3.0; 
+		this.outlinePass.visibleEdgeColor.set('#ffffff'); 
+		this.outlinePass.renderToScreen = false;
+		this.outlinePass.clear = false;
+		this.outlinePass.selectedObjects = [];
+
+		// update which object should have an outline when selection changes
+		watch(()=>this.app.sceneMgr.selectedItem.id.value, (newId) => {
+			this.outlinePass.selectedObjects = newId==null ? [] : [
+				this.app.sceneMgr.selectedItem.mesh
+			];
+		}, { immediate: true });
+
+		// add gamma correction pass to fix render colors
+		this.gammaCorrectionPass = new ShaderPass(GammaCorrectionShader);
+		this.gammaCorrectionPass.renderToScreen = true;
+
+		// all all our passes!
+		this.composer.addPass(this.renderPass);
+		this.composer.addPass(this.outlinePass);
+		this.composer.addPass(this.gammaCorrectionPass);
+
 		// set up clear rendering
-		this.threeBits.renderer.setClearAlpha(0.0);
-		this.threeBits.renderer.setClearColor(0x000000, 0); // optional, for total transparency
+		this.threeBits.renderer.setClearColor(0x000000, 0);
 
 		// the scene will come with an orbit camera, but we'll also make a static camera
 		this.orbitCamera = camera;
@@ -123,11 +161,15 @@ export default class ViewportScene {
 	
 			this.staticCamera.aspect = newWidth / newHeight;
 			this.staticCamera.updateProjectionMatrix();
+
+			this.composer.setSize(newWidth, newHeight);
 		});	
 		this.resizeObserver.observe(this.containerElement);
 
+		this.composer.setSize(width, height);
+
 		// set up three query
-		this.tq = new ThreeQuery(scene);
+		this.tq = new ThreeQuery(this.scene);
 		this.$ = this.tq.$;
 
 	}
@@ -248,7 +290,9 @@ export default class ViewportScene {
 			const cameraToUse = this.orbit.value ? this.orbitCamera : this.staticCamera;
 
 			// render
-			this.threeBits.renderer.render(this.scene, cameraToUse);
+			this.renderPass.camera = cameraToUse;
+			this.outlinePass.camera = cameraToUse;
+			this.composer.render(this.scene, cameraToUse);
 		}
 		animate();
 	}
