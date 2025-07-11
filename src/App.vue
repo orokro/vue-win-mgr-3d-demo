@@ -42,7 +42,9 @@
 // vue
 import { onMounted, provide, ref } from 'vue';
 
+// import css items
 import 'vue-win-mgr/dist/style.css';
+import 'material-icons/iconfont/material-icons.css';
 
 // window components
 import Viewport from './components/windows/Viewport.vue';

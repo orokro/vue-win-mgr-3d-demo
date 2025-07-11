@@ -27,7 +27,7 @@
 		<div class="view-mode-select">
 			<select 
 				@change="viewportScene.setCamera($event.target.value)"
-				:value="props.side"
+				v-model="initialSide"
 			>
 				<option value="free">Free</option>
 				<option value="top">Top</option>
@@ -39,13 +39,22 @@
 			</select>
 		</div>
 
+		<!-- home button, only shown if we're in orbit mode -->
+		<div 
+			v-if="showOrbit"
+			class="home-button"
+			@click="viewportScene.setOrbitCameraToDefaultView()"
+		>
+			<span class="material-icons">home</span>
+		</div>
+
 	</div>
 	
 </template>
 <script setup>
 
 // vue
-import { onMounted, onUnmounted, ref, inject } from 'vue';
+import { onMounted, onUnmounted, ref, shallowRef, inject, computed } from 'vue';
 
 // our app
 import ViewportScene from '@/classes/ViewportScene';
@@ -67,18 +76,25 @@ const props = defineProps({
 	}
 });
 
+const initialSide = ref(props.side);
+
 
 // build in Mount ThreeQuery renderer stuffs when we mount
-let viewportScene = null;
+let viewportScene = shallowRef(null);
 onMounted(()=>{
 
 	// create a new ViewportScene instance
-	viewportScene = new ViewportScene(app, scene, viewportContainerEl.value);
+	viewportScene.value = new ViewportScene(app, scene, viewportContainerEl.value);
 
 	// set the camera to the default view
-	viewportScene.setCamera(props.side);
+	viewportScene.value.setCamera(props.side);
 
 });
+
+const showOrbit = computed(() => {
+  return viewportScene.value?.orbit?.value === true;
+});
+
 
 
 // clean up when we unmount
@@ -127,6 +143,8 @@ onUnmounted(()=>{
 		// for debug
 		/* border: 2px solid red; */
 
+
+		// select box for view modes
 		.view-mode-select {
 
 			// fixed on top left
@@ -146,9 +164,49 @@ onUnmounted(()=>{
 				font-family: 'Courier New', Courier, monospace;
 				cursor: pointer;
 
+				&:hover {
+					background: rgba(255, 255, 255, 0.5);
+				}
+
+				&:active, &:focus {
+					background: rgba(0, 0, 0, 0.5);
+				}
 			}// select
 
 		}// .view-mode-select
+
+		// reset view home button
+		.home-button {
+
+			// fixed on top right
+			position: absolute;
+			top: 20px;
+			right: 20px;
+
+			width: 32px;
+			height: 32px;
+
+			// make it look like a button
+			background: rgba(0, 0, 0, 0.5);
+			color: #EFEFEF;
+			border: 2px solid rgba(255, 255, 255, 0.8);
+			padding: 5px 10px;
+			border-radius: 5px;
+			cursor: pointer;
+			text-align: center;
+
+			&:hover {
+				background: rgba(255, 255, 255, 0.5);
+			}
+			
+			span {
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+			}
+
+		}// .home-button
 
 	}// .viewport-window
 
