@@ -29,8 +29,9 @@
 						v-for="item in assetMgr.assets.value"
 						:key="item.id"
 						class="asset-item"
-						@click="sceneMgr.addItem(item.name)"
 						:title="`${item.name}`"
+						@click=""
+						@mousedown="e=>startDrag(e, item)"
 					>
 						<!-- item thumb -->
 						<div class="thumbnail" align="center">
@@ -58,16 +59,138 @@
 
 	</div>
 
+	<Teleport to="body">
+
+		<!-- teleport to body so we can drag items out of the window -->
+		<div class="drag-overlay" v-if="isDraggingItem">
+
+			<div 
+				class="thumbnail"
+				align="center"
+				:style="{
+					left: `${dragX}px`,
+					top: `${dragY}px`
+				}"
+				:class="{
+					'over-drop-target': overDropTarget
+				}"
+			>
+				<img
+					:src="`/img/shapes/${dragItem.name.toLowerCase()}.png`"
+					height="100%"
+					:alt="`${dragItem.name}`"
+				/>
+			</div>
+			
+		</div>
+
+	</Teleport>
 </template>
 <script setup>
 
 // vue
-import { ref, onMounted, inject } from 'vue';
+import { ref, onMounted, onUnmounted, inject, Teleport } from 'vue';
+
+// lib/misc
+import DragHelper from 'gdraghelper';
 
 // get our app & note manager state systems
 const app = inject('app');
 const sceneMgr = app.sceneMgr;
 const assetMgr = app.assetMgr;
+
+// true when we're dragging a shape
+const isDraggingItem = ref(false);
+const dragItem = ref(null);
+const dragX = ref(0);
+const dragY = ref(0);
+const overDropTarget = ref(false);
+
+// symbol to mark elements that can receive drops
+const DROP_RECEIVER = ('drop-receiver');
+
+// make drag helper to handle drag events
+const dragHelper = new DragHelper();
+
+
+/**
+ * Starts dragging an item, allowing used to place it in the scene
+ * 
+ */
+function startDrag(event, item){
+
+	// set initial drag state
+	dragItem.value = item;
+	isDraggingItem.value = true;
+	overDropTarget.value = false;
+
+	// get the top-left in the screen of the event target
+	const targetRect = event.target.getBoundingClientRect();
+	const startLeft = targetRect.left;
+	const startTop = targetRect.top;
+
+	dragX.value = startLeft;
+	dragY.value = startTop;
+
+	// start drag routine
+	dragHelper.dragStart(
+
+		// during drag
+		(dx, dy)=>{
+			dragX.value = startLeft - dx;
+			dragY.value = startTop - dy;
+
+			// get window mouse position
+			const cursorPos = dragHelper.getCursorPos();
+			const result = getDropReceiver(cursorPos.x, cursorPos.y);
+			overDropTarget.value = (!!result);
+
+		},
+
+		// upon complete
+		(dx, dy) => {
+
+			const cursorPos = dragHelper.getCursorPos();
+			const result = getDropReceiver(cursorPos.x, cursorPos.y);
+
+			if(result!=null){
+				result.receiver.drop(item);
+			}
+
+			isDraggingItem.value = false;
+			dragItem.value = null;
+		}
+	)
+}
+
+
+/**
+ * Finds the nearest DOM element at (x, y) that has a drop receiver instance attached via Symbol.
+ * @param {number} x - The x-coordinate (usually event.clientX).
+ * @param {number} y - The y-coordinate (usually event.clientY).
+ * @returns {{ el: Element, receiver: any } | null}
+ */
+function getDropReceiver(x, y) {
+
+	let el = document.elementFromPoint(x, y);
+
+	while (el && el !== document.body) {
+
+		if (el.hasAttribute('data-drop-target')) {
+			return { el, receiver: el[DROP_RECEIVER] };
+		}
+		el = el.parentElement;
+	}
+
+	return null;
+}
+
+
+// clear window events
+onUnmounted(()=>{
+	dragHelper.end();
+});
+
 
 </script>
 <style lang="scss" scoped>
@@ -117,6 +240,9 @@ const assetMgr = app.assetMgr;
 				color: #EFEFEF;
 				font-weight: bolder;
 				padding: 4px 15px;
+
+				text-wrap: nowrap;
+				text-overflow: ellipsis;
 
 			}// .header
 
@@ -180,6 +306,10 @@ const assetMgr = app.assetMgr;
 							position: absolute;
 							inset: 10px 0px 20px 0px;
 							/* border: 1px solid red; */
+
+							img {
+								pointer-events: none;
+							}
 						}// .thumbnail
 
 						// title for the note
@@ -216,5 +346,35 @@ const assetMgr = app.assetMgr;
 		}// .assets-list
 
 	}// .asset-list-window
+
+	// styles for the drag system when dragging objects
+	.drag-overlay {
+
+		// don't interact with the overlay
+		pointer-events: none;
+
+		// for debug
+		/* background: rgba(0, 0, 0, 0.5); */
+
+		// fill screen on top
+		position: fixed;
+		inset: 0px 0px 0px 0px;	
+		z-index: 1000;
+
+		// actual thumbnail preview that moves when dragging
+		.thumbnail {
+
+			position: absolute;
+			width: 130px;
+			height: 100px;
+
+			opacity: 0.5;
+
+			&.over-drop-target {
+				opacity: 1;
+			}
+		}//.thumbnail
+
+	}// .drag-overlay
 
 </style>

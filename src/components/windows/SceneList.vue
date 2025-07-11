@@ -12,7 +12,7 @@
 	<div class="scene-list-window">
 
 		<!-- column of items in the scene -->
-		<div class="items-list">
+		<div ref="dropEl" data-drop-target="true" class="items-list">
 
 			<!-- list box containing the items & add button -->
 			<div class="list mac-bar">
@@ -53,11 +53,37 @@
 <script setup>
 
 // vue
-import { ref, onMounted, inject } from 'vue';
+import { ref, onMounted, onUnmounted, inject } from 'vue';
 
 // get our app & note manager state systems
 const app = inject('app');
 const sceneMgr = app.sceneMgr;
+
+// ref to add our drop logic code to
+const dropEl = ref(null);
+
+// symbol to mark elements that can receive drops
+const DROP_RECEIVER = ('drop-receiver');
+
+onMounted(()=> {
+
+	dropEl.value[DROP_RECEIVER] = {
+		// when we drop an item on this element, we add it to the scene
+		drop: (item) => {
+			sceneMgr.addItem(item.name);
+		}
+	};
+
+	console.log(dropEl.value, dropEl.value[DROP_RECEIVER])
+});
+
+onUnmounted(() => {
+
+	// clean up the drop receiver when we unmount
+	if (dropEl.value) {
+		delete dropEl.value[DROP_RECEIVER];
+	}
+});
 
 </script>
 <style lang="scss" scoped>

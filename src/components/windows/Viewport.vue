@@ -171,6 +171,7 @@ onUnmounted(()=>{
 				&:active, &:focus {
 					background: rgba(0, 0, 0, 0.5);
 				}
+				
 			}// select
 
 		}// .view-mode-select
