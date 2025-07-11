@@ -36,7 +36,7 @@
 						<!-- item thumb -->
 						<div class="thumbnail" align="center">
 							<img
-								:src="`/img/shapes/${item.name.toLowerCase()}.png`"
+								:src="`img/shapes/${item.name.toLowerCase()}.png`"
 								height="100%"
 								:alt="`${item.name}`"
 							/>
@@ -76,7 +76,7 @@
 				}"
 			>
 				<img
-					:src="`/img/shapes/${dragItem.name.toLowerCase()}.png`"
+					:src="`img/shapes/${dragItem.name.toLowerCase()}.png`"
 					height="100%"
 					:alt="`${dragItem.name}`"
 				/>

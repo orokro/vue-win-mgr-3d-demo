@@ -115,7 +115,7 @@ export default class SceneMgr {
 	 * 
 	 * @param {String} path - Path to the HDR file
 	 */
-	async loadHDR(path = '/img/hdr/venice_sunset_1k.hdr') {
+	async loadHDR(path = 'img/hdr/venice_sunset_1k.hdr') {
 
 		// load our image
 		const loader = new RGBELoader();

@@ -332,8 +332,10 @@ function deleteNote(note){
 						font-size: 24px;
 						font-weight: bolder;
 						color: white;
-						position: relative;
-						top: -3px;
+						position: absolute;
+						top: 50%;
+						left: 50%;
+						transform: translate(-50%, -50%);
 					}
 
 				}// .add-note-button
