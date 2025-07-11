@@ -122,7 +122,7 @@ const availableWindows = [
 
 
 // build a layout to test with
-const layout  = [
+const layout = [
 	{	
 		// we'll build layout in hypothetical 1080P space
 		name: "window",
@@ -189,10 +189,12 @@ function disableContextMenus(event){
 // for debug, we'll provide it to the window context so it will be available in the console
 onMounted(() => {
 
-	window.app = app;
-
+	// provide the app to the window manager context
 	const ctx = windowManagerEl.value?.getContext();
-	window.wctx = ctx;
+	app.setWindowManagerContext(ctx);
+
+	// for debug, we'll provide the app to the window context so it will be available in the console
+	window.app = app;
 });
 
 

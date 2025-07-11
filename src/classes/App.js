@@ -56,6 +56,8 @@ import AssetMgr from "./AssetMgr";
 import NoteMgr from "./NoteMgr";
 import SettingsMgr from "./SettingsMgr";
 
+import { WindowManagerContext } from "vue-win-mgr";
+
 // main export
 export default class App {
 
@@ -64,11 +66,25 @@ export default class App {
 	 */
 	constructor(){
 
+		// once the app mounts this will be set
+		// so we can interact with the window manager system
+		this.wc = null;
+
 		// build a new scene, asset, note, and settings managers
 		this.sceneMgr = new SceneMgr(this);
 		this.assetMgr = new AssetMgr(this);
 		this.noteMgr = new NoteMgr(this);
 		this.settingsMgr = new SettingsMgr(this);
+	}
+
+
+	/**
+	 * Saves the window manager context to the app instance.
+	 * 
+	 * @param {WindowManagerContext} winMgrContext - context for our window manager
+	 */
+	setWindowManagerContext(winMgrContext) {
+		this.wc = winMgrContext;
 	}
 
 }

@@ -335,7 +335,6 @@ export default class SceneMgr {
 	 */
 	selectItem(itemOrID) {
 
-		console.log(itemOrID);
 		// check if the itemOrID is a ThreeJS Mesh - if it is,
 		// we can filter sceneItems by mesh
 		if(itemOrID instanceof THREE.Mesh) {
