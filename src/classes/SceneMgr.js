@@ -214,6 +214,7 @@ export default class SceneMgr {
 	}
 
 	/**
+	 * 
 	 * Show or hide the axes helper.
 	 * 
 	 * @param {Boolean} on - Whether to show the axes

@@ -112,6 +112,9 @@ export default class ViewportScene {
 		this.staticCamera.position.set(0, 0, 10);
 		this.staticCamera.lookAt(0, 0, 0);
 
+		// make sure our orbit camera starts in a good spot
+		this.setOrbitCameraToDefaultView(6);
+
 		// update perspective matrix when the scene is resized
 		this.resizeObserver = new ResizeObserver(() => {
 
@@ -171,6 +174,31 @@ export default class ViewportScene {
 		this.staticCamera.position.set(0, 0, 0);
 		this.staticCamera.position[config.axis] = config.dir * distance;	
 		this.staticCamera.lookAt(0, 0, 0);
+	}
+
+
+	/**
+	 * Positions the orbit camera at a nice 3/4 view and updates controls.
+	 * Ensures the orbit controls respect this as the new starting point.
+	 * 
+	 * @param {number} distance - Distance from origin (default 8)
+	 */
+	setOrbitCameraToDefaultView(distance = 8) {
+		
+		if (!this.orbitCamera || !this.threeBits?.controls) return;
+
+		const cam = this.orbitCamera;
+		const controls = this.threeBits.controls;
+
+		// Set camera to a 3/4 angle (x+, y+, z+)
+		const offset = distance / Math.sqrt(3);
+		cam.position.set(-offset/3, offset/2, offset);
+
+		// Focus on origin
+		controls.target.set(0, 0, 0);
+
+		// Update controls to acknowledge new state
+		controls.update();
 	}
 
 
