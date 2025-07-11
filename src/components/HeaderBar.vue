@@ -5,6 +5,7 @@
 	The bar with buttons & links a long the top of the page
 -->
 <template>
+
 	<div class="header-bar">
 		
 		<!-- application title -->
@@ -32,7 +33,38 @@
 			</button>
 		</div>
 
+		<!-- Spacer to push content to the right -->
+		<div class="flex-grow"></div>
+
+		<!-- Right-aligned items -->
+		<div class="flex items-center links">
+
+			<div>
+				<a href="https://github.com/orokro/vue-win-mgr-3d-demo" target="_blank" rel="noopener noreferrer">
+					<img src="/img/logos/gh_white_small.png" alt="Logo" height="23px" />
+				</a>
+				<span class="label"><a href="https://github.com/orokro/vue-win-mgr-3d-demo" target="_blank" rel="noopener noreferrer">Project</a></span>
+			</div>
+
+			<div>
+				<a href="https://github.com/orokro/Vue-Window-Manager" target="_blank" rel="noopener noreferrer">
+					<img src="/img/logos/gh_white_small.png" alt="Logo" height="23px" />
+				</a>
+				<span class="label"><a href="https://github.com/orokro/Vue-Window-Manager" target="_blank" rel="noopener noreferrer">Library</a></span>
+				
+			</div>
+
+			<div>
+				<a href="https://www.npmjs.com/package/vue-win-mgr?activeTab=readme" target="_blank" rel="noopener noreferrer">
+					<img src="/img/logos/npm_logo.png" alt="Logo" height="23px" />
+				</a>
+				<span class="label"><a href="https://www.npmjs.com/package/vue-win-mgr?activeTab=readme" target="_blank" rel="noopener noreferrer">Library</a></span>
+			</div>
+			
+		</div>
+
 	</div>
+
 </template>
 <script setup>
 
@@ -134,7 +166,7 @@ function addLayout(){
 		.layout-select {
 
 			padding: 7px 0px;
-			color: #AAA;
+			color: #DDD;
 			margin-left: 10px;
 
 			select {
@@ -193,6 +225,41 @@ function addLayout(){
 			}// .add-layout-button
 
 		}// .layout-select
+
+		.flex-grow {
+			flex-grow: 1;
+			flex-shrink: 1;
+			// for debug
+			/* border: 1px solid green; */
+		}
+
+		.items-center {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 20px;
+
+			// for debug
+			/* border: 1px solid purple; */
+		}
+
+		.links {
+			
+			padding-top: 4px;
+
+			span {
+				a {
+					color: white;
+					font-weight: bolder;
+
+					padding: 0px 10px 0px 5px;
+
+					position: relative;
+					top: -6px;
+				}
+			}
+
+		}// .links
 
 	}// .header-bar
 
