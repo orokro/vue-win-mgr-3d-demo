@@ -35,7 +35,6 @@ export default class SettingsMgr {
 		this.lightingEnabled = ref(true);		
 		this.ambientLightIntensity = ref(0.5);
 		this.directionalLightIntensity = ref(0.5);
-		this.hdrLightIntensity = ref(1.0);
 
 		// update threeJS settings when certain refs change
 		this.setUpWatches();
@@ -71,10 +70,6 @@ export default class SettingsMgr {
 		}, { immediate: true });
 		watch(()=>this.directionalLightIntensity.value, (newValue) => {
 			this.app.sceneMgr.lights.directionalLight.intensity = newValue;
-		}, { immediate: true });
-		watch(
-			()=>this.hdrLightIntensity.value, (newValue)=>{
-			this.app.sceneMgr.setHDRIntensity(newValue);
 		}, { immediate: true });
 	}
 

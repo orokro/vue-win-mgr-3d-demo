@@ -118,8 +118,8 @@ export default class SceneMgr {
 				this.scene.environment = hdrEquirect;
 				this.scene.background = hdrEquirect;
 
-				this.hdrTexture = hdrEquirect; // store it for future updates
-				this.setHDRIntensity(1); // default intensity
+				// store it for future updates
+				this.hdrTexture = hdrEquirect; 
 
 				// hidden by default
 				this.showHDR(false);
@@ -163,26 +163,6 @@ export default class SceneMgr {
 
 
 	/**
-	 * Updates the intensity of the HDR environment map.
-	 * 
-	 * @param {Number} intensity - Intensity multiplier for environment lighting
-	 */
-	setHDRIntensity(intensity) {
-
-		if (!this.scene.environment)
-			return;
-
-		// Traverse scene and update environment intensity on mesh materials if supported
-		this.scene.traverse((child) => {
-			if (child.isMesh && child.material && 'envMapIntensity' in child.material) {
-				child.material.envMapIntensity = intensity;
-				child.material.needsUpdate = true;
-			}
-		});
-	}
-
-
-	/**
 	 * Controls whether the HDR texture is shown as the scene background.
 	 * If false, sets a transparent background while keeping HDR lighting.
 	 * 
@@ -212,6 +192,7 @@ export default class SceneMgr {
 			this.gridHelper.visible = on;
 		}
 	}
+
 
 	/**
 	 * 

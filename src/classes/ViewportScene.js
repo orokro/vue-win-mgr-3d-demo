@@ -184,7 +184,7 @@ export default class ViewportScene {
 	 * @param {number} distance - Distance from origin (default 8)
 	 */
 	setOrbitCameraToDefaultView(distance = 8) {
-		
+
 		if (!this.orbitCamera || !this.threeBits?.controls) return;
 
 		const cam = this.orbitCamera;
@@ -196,7 +196,7 @@ export default class ViewportScene {
 
 		// Focus on origin
 		controls.target.set(0, 0, 0);
-
+		controls.enableDamping = false;
 		// Update controls to acknowledge new state
 		controls.update();
 	}

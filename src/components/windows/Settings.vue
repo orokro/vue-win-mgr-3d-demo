@@ -60,10 +60,6 @@
 					<PropertyRow label="Directional Light Intensity">
 						<input type="range" min="0" max="10" step="0.01" v-model.number="settingsMgr.directionalLightIntensity.value" />
 					</PropertyRow>
-
-					<PropertyRow label="HDR Light Intensity">
-						<input type="range" min="0" max="10" step="0.01" v-model.number="settingsMgr.hdrLightIntensity.value" />
-					</PropertyRow>
 				</div>
 
 			<!-- /.list -->

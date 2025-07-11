@@ -135,7 +135,7 @@ const layout  = [
 		windows: ['viewport', 'about', 'notes'], 
 		style: FRAME_STYLE.TABBED,
 		left: 0,
-		right: ["ref", "window.right-430"],
+		right: ["ref", "window.right-460"],
 		top: 0,
 		bottom: ["ref", "window.bottom-300"]
 	},
@@ -151,7 +151,7 @@ const layout  = [
 	},
 	{	// Tool palette, on right by default
 		name: "sceneList",
-		windows: ['scene-list', 'settings'], 
+		windows: ['scene-list'], 
 		style: FRAME_STYLE.TABBED,
 		left: ["ref", "MainView.right"],
 		right: ["ref", "window.right"],
@@ -161,7 +161,7 @@ const layout  = [
 	{
 		// Properties inspector, on right by default
 		name: "propertiesInspector",
-		windows: ['settings', 'properties-inspector'], 
+		windows: ['properties-inspector', 'settings'], 
 		style: FRAME_STYLE.TABBED,
 		left: ["ref", "MainView.right"],
 		right: ["ref", "window.right"],
