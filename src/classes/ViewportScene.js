@@ -66,7 +66,7 @@ export default class ViewportScene {
 	/**
 	 * Does the initial ThreeJS construction for the scene
 	 */
-	buildScene(){
+	async buildScene(){
 
 		// build generic scene with ThreeQuery
 		const container = this.containerElement;
@@ -89,8 +89,12 @@ export default class ViewportScene {
 			resizeObserver
 		} = this.threeBits
 		
+		// set up clear rendering
+		this.threeBits.renderer.setClearAlpha(0.0);
+		this.threeBits.renderer.setClearColor(0x000000, 0); // optional, for total transparency
+
 		// add HDR environment map
-		this.loadHDR(); // loads the HDR environment lighting
+		this.loadHDR();
 
 		// the scene will come with an orbit camera, but we'll also make a static camera
 		this.orbitCamera = camera;
@@ -169,11 +173,12 @@ export default class ViewportScene {
 	 */
 	async loadHDR(path = '/img/hdr/venice_sunset_1k.hdr') {
 
+		// load our image
 		const loader = new RGBELoader();
-
 		return new Promise((resolve, reject) => {
 			loader.load(path, (hdrEquirect) => {
 
+				// set it up as an equirectangular mapping
 				hdrEquirect.mapping = THREE.EquirectangularReflectionMapping;
 
 				this.scene.environment = hdrEquirect;
@@ -182,7 +187,11 @@ export default class ViewportScene {
 				this.hdrTexture = hdrEquirect; // store it for future updates
 				this.setHDRIntensity(1); // default intensity
 
+				// hidden by default
+				this.showHDR(false);
+				
 				resolve(hdrEquirect);
+
 			}, undefined, reject);
 		});
 	}
@@ -205,6 +214,26 @@ export default class ViewportScene {
 				child.material.needsUpdate = true;
 			}
 		});
+	}
+
+
+	/**
+	 * Controls whether the HDR texture is shown as the scene background.
+	 * If false, sets a transparent background while keeping HDR lighting.
+	 * 
+	 * @param {Boolean} show - Whether to display the HDR as background.
+	 */
+	showHDR(show = true) {
+
+		if (!this.hdrTexture)
+			return;
+
+		this.scene.background = show ? this.hdrTexture : null;
+
+		// Enable transparency when HDR is hidden
+		if (this.threeBits?.renderer) {
+			this.threeBits.renderer.setClearAlpha(show ? 1.0 : 0.0);
+		}
 	}
 
 
