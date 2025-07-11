@@ -335,6 +335,13 @@ export default class SceneMgr {
 	 */
 	selectItem(itemOrID) {
 
+		console.log(itemOrID);
+		// check if the itemOrID is a ThreeJS Mesh - if it is,
+		// we can filter sceneItems by mesh
+		if(itemOrID instanceof THREE.Mesh) {
+			const theItem = this.sceneItems.value.find(i => i.mesh === itemOrID);
+			itemOrID = theItem;
+		}
 		const id = typeof itemOrID === "object" ? itemOrID.id : parseInt(itemOrID, 10);
 		const item = this.sceneItems.value.find(i => i.id === id);
 
@@ -403,6 +410,8 @@ export default class SceneMgr {
 		// build the new mesh & add it to the scene
 		const mesh = new THREE.Mesh(geometry, material);
 		this.scene.add(mesh);
+
+		mesh.userData.clickable = true;
 
 		// generate a unique name for this item
 		const name = this.generateUniqueName(kind);

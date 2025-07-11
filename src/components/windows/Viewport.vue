@@ -21,6 +21,7 @@
 			:style="{
 				background: app.settingsMgr.backgroundColor.value || 'black',
 			}"
+			@click="viewportScene.onClick($event)"
 		></div>
 
 		<!-- a select combo for view modes -->

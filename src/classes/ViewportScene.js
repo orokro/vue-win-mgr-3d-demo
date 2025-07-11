@@ -271,6 +271,33 @@ export default class ViewportScene {
 
 
 	/**
+	 * Handle when user clicks on the viewport, select object if clicked
+	 * 
+	 * @param {MouseEvent} event - the mouse event that triggered the click
+	 */
+	onClick(event){
+
+		// raycast get the first mesh we hit
+		const el = this.containerElement;
+		const rect = el.getBoundingClientRect();
+		const ndcX = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+		const ndcY = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+		const raycaster = new THREE.Raycaster();
+		raycaster.setFromCamera(new THREE.Vector2(ndcX, ndcY), this.orbit.value ? this.orbitCamera : this.staticCamera);	
+		let intersects = raycaster.intersectObjects(this.scene.children, true);
+		intersects = intersects.filter(intersect => intersect.object.userData?.clickable == true);
+		if (intersects.length > 0) {
+
+			const hit = intersects[0].object;
+			this.app.sceneMgr.selectItem(hit);
+		} else {
+			this.app.sceneMgr.selectNone();
+		}
+	}
+
+
+	/**
 	 * Starts the render loop for the scene.
 	 */
 	startRenderLoop(){
