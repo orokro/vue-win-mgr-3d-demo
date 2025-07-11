@@ -13,40 +13,65 @@
 <template>
 
 	<div class="viewport-window">
-		<div ref="viewportContainerEl" class="container">
 
+		<!-- we'll mount the ThreeJS renderer canvas in this element -->
+		<div ref="viewportContainerEl" class="container"></div>
+
+		<!-- a select combo for view modes -->
+		<div class="view-mode-select">
+			<select @change="setCamera(tq.camera, $event.target.value)">
+				<option value="free">Free</option>
+				<option value="top">Top</option>
+				<option value="bottom">Bottom</option>
+				<option value="left">Left</option>
+				<option value="right">Right</option>
+				<option value="front">Front</option>
+				<option value="back">Back</option>
+			</select>
 		</div>
+
 	</div>
 	
 </template>
 <script setup>
 
 // vue
-import { onMounted, ref, inject } from 'vue';
+import { onMounted, onUnmounted, ref, inject } from 'vue';
 
-// lib/misc
-import ThreeQuery from 'three-query';
+// our app
+import ViewportScene from '@/classes/ViewportScene';
 
 // get our app & instantiate a local ThreeQuery
 const app = inject('app');
 const scene = app.sceneMgr.scene;
-const tq = new ThreeQuery(scene);
 
 // our element to mount the viewport to
 const viewportContainerEl = ref(null);
 
 // build in Mount ThreeQuery renderer stuffs when we mount
+let viewportScene = null;
 onMounted(()=>{
 
-	const container = viewportContainerEl.value;
-	ThreeQuery.useScene(scene, container, {
-		autoSize: true,
-		autoRender: true,
-		addCube: false,
-		addLights: false,
-		addControls: true
-	});
-})
+	// create a new ViewportScene instance
+	viewportScene = new ViewportScene(scene, viewportContainerEl.value);
+
+	// set the camera to the default view
+	viewportScene.setCamera('free');
+
+});
+
+
+// clean up when we unmount
+onUnmounted(()=>{
+
+	// destroy the viewport scene
+	if (viewportScene) {
+		viewportScene.destruct();
+		viewportScene = null;
+	}
+
+});
+
 
 </script>
 <style lang="scss" scoped>
