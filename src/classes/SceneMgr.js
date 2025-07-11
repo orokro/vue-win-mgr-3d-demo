@@ -22,6 +22,7 @@ import { shallowRef, ref, watch } from "vue";
 
 // three
 import * as THREE from "three";
+import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
 
 // main export
 export default class SceneMgr {
@@ -53,6 +54,9 @@ export default class SceneMgr {
 
 		this.lights.directionalLight.position.set(5, 10, 5);
 		this.lights.directionalLight.intensity = 2.5;
+
+		// add HDR environment map
+		this.loadHDR();
 
 		// When an item is selected, we'll move it's properties from the ThreeJS Object3D to these
 		// Refs for the templates to bind to.
@@ -86,6 +90,37 @@ export default class SceneMgr {
 
 
 	/**
+	 * Loads an HDR environment map and applies it to the scene.
+	 * 
+	 * @param {String} path - Path to the HDR file
+	 */
+	async loadHDR(path = '/img/hdr/venice_sunset_1k.hdr') {
+
+		// load our image
+		const loader = new RGBELoader();
+		return new Promise((resolve, reject) => {
+			loader.load(path, (hdrEquirect) => {
+
+				// set it up as an equirectangular mapping
+				hdrEquirect.mapping = THREE.EquirectangularReflectionMapping;
+
+				this.scene.environment = hdrEquirect;
+				this.scene.background = hdrEquirect;
+
+				this.hdrTexture = hdrEquirect; // store it for future updates
+				this.setHDRIntensity(1); // default intensity
+
+				// hidden by default
+				this.showHDR(false);
+
+				resolve(hdrEquirect);
+
+			}, undefined, reject);
+		});
+	}
+
+
+	/**
 	 * Adds a few demo items to the scene
 	 */
 	addDemoItems(){
@@ -113,6 +148,72 @@ export default class SceneMgr {
 		// select the first item by default
 		if(this.sceneItems.value.length > 0)
 			this.selectItem(this.sceneItems.value[0]);
+	}
+
+
+	/**
+	 * Updates the intensity of the HDR environment map.
+	 * 
+	 * @param {Number} intensity - Intensity multiplier for environment lighting
+	 */
+	setHDRIntensity(intensity) {
+
+		if (!this.scene.environment)
+			return;
+
+		// Traverse scene and update environment intensity on mesh materials if supported
+		this.scene.traverse((child) => {
+			if (child.isMesh && child.material && 'envMapIntensity' in child.material) {
+				child.material.envMapIntensity = intensity;
+				child.material.needsUpdate = true;
+			}
+		});
+	}
+
+
+	/**
+	 * Controls whether the HDR texture is shown as the scene background.
+	 * If false, sets a transparent background while keeping HDR lighting.
+	 * 
+	 * @param {Boolean} show - Whether to display the HDR as background.
+	 */
+	showHDR(show = true) {
+
+		if (!this.hdrTexture)
+			return;
+
+		this.scene.background = show ? this.hdrTexture : null;
+
+		// Enable transparency when HDR is hidden
+		if (this.threeBits?.renderer) {
+			this.threeBits.renderer.setClearAlpha(show ? 1.0 : 0.0);
+		}
+	}
+
+
+	/**
+	 * Turns all lights in the scene on or off, including HDR lighting and manual lights.
+	 * 
+	 * @param {Boolean} on - Whether to enable all lights
+	 */
+	toggleLights(on = true) {
+
+		// Manual lights
+		if (this.lights) {
+			const { ambientLight, directionalLight } = this.lights;
+
+			if (ambientLight) 
+				ambientLight.visible = on;
+			if (directionalLight)
+				directionalLight.visible = on;
+		}
+
+		// HDR lighting
+		if (on) {
+			this.scene.environment = this.hdrTexture || null;
+		} else {
+			this.scene.environment = null;
+		}
 	}
 
 

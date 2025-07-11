@@ -104,9 +104,6 @@ export default class ViewportScene {
 		this.threeBits.renderer.setClearAlpha(0.0);
 		this.threeBits.renderer.setClearColor(0x000000, 0); // optional, for total transparency
 
-		// add HDR environment map
-		this.loadHDR();
-
 		// the scene will come with an orbit camera, but we'll also make a static camera
 		this.orbitCamera = camera;
 		const width = this.containerElement.clientWidth;
@@ -174,104 +171,6 @@ export default class ViewportScene {
 		this.staticCamera.position.set(0, 0, 0);
 		this.staticCamera.position[config.axis] = config.dir * distance;	
 		this.staticCamera.lookAt(0, 0, 0);
-	}
-
-
-	/**
-	 * Loads an HDR environment map and applies it to the scene.
-	 * 
-	 * @param {String} path - Path to the HDR file
-	 */
-	async loadHDR(path = '/img/hdr/venice_sunset_1k.hdr') {
-
-		// load our image
-		const loader = new RGBELoader();
-		return new Promise((resolve, reject) => {
-			loader.load(path, (hdrEquirect) => {
-
-				// set it up as an equirectangular mapping
-				hdrEquirect.mapping = THREE.EquirectangularReflectionMapping;
-
-				this.scene.environment = hdrEquirect;
-				this.scene.background = hdrEquirect;
-
-				this.hdrTexture = hdrEquirect; // store it for future updates
-				this.setHDRIntensity(1); // default intensity
-
-				// hidden by default
-				this.showHDR(false);
-
-				resolve(hdrEquirect);
-
-			}, undefined, reject);
-		});
-	}
-
-
-	/**
-	 * Updates the intensity of the HDR environment map.
-	 * 
-	 * @param {Number} intensity - Intensity multiplier for environment lighting
-	 */
-	setHDRIntensity(intensity) {
-
-		if (!this.scene.environment)
-			return;
-
-		// Traverse scene and update environment intensity on mesh materials if supported
-		this.scene.traverse((child) => {
-			if (child.isMesh && child.material && 'envMapIntensity' in child.material) {
-				child.material.envMapIntensity = intensity;
-				child.material.needsUpdate = true;
-			}
-		});
-	}
-
-
-	/**
-	 * Controls whether the HDR texture is shown as the scene background.
-	 * If false, sets a transparent background while keeping HDR lighting.
-	 * 
-	 * @param {Boolean} show - Whether to display the HDR as background.
-	 */
-	showHDR(show = true) {
-
-		if (!this.hdrTexture)
-			return;
-
-		this.scene.background = show ? this.hdrTexture : null;
-
-		// Enable transparency when HDR is hidden
-		if (this.threeBits?.renderer) {
-			this.threeBits.renderer.setClearAlpha(show ? 1.0 : 0.0);
-		}
-	}
-
-
-	/**
-	 * Turns all lights in the scene on or off, including HDR lighting and manual lights.
-	 * 
-	 * @param {Boolean} on - Whether to enable all lights
-	 */
-	toggleLights(on = true) {
-
-		// Manual lights
-		if (this.threeBits?.lights) {
-			const { ambientLight, directionalLight } = this.threeBits.lights;
-
-			console.log("aids")
-			if (ambientLight) 
-				ambientLight.visible = on;
-			if (directionalLight)
-				directionalLight.visible = on;
-		}
-
-		// HDR lighting
-		if (on) {
-			this.scene.environment = this.hdrTexture || null;
-		} else {
-			this.scene.environment = null;
-		}
 	}
 
 

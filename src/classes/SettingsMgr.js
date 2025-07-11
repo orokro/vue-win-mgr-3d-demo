@@ -50,15 +50,23 @@ export default class SettingsMgr {
 		// 3d items
 
 		// lighting
-		watch(()=>this.lightingEnabled.value, (newValue) => {
-			this.app.sceneMgr.lights.ambientLight.visible = newValue;
-			this.app.sceneMgr.lights.directionalLight.visible = newValue;
-		});
+		watch(
+			()=>this.showHDRBackground.value, (newValue)=>{
+			this.app.sceneMgr.showHDR(newValue);
+		}, { immediate: true });
+		watch(
+			()=>this.lightingEnabled.value, (newValue)=>{
+				this.app.sceneMgr.toggleLights(newValue);
+		}, { immediate: true });
 		watch(()=>this.ambientLightIntensity.value, (newValue) => {
 			this.app.sceneMgr.lights.ambientLight.intensity = newValue;
 		}, { immediate: true });
 		watch(()=>this.directionalLightIntensity.value, (newValue) => {
 			this.app.sceneMgr.lights.directionalLight.intensity = newValue;
+		}, { immediate: true });
+		watch(
+			()=>this.hdrLightIntensity.value, (newValue)=>{
+			this.app.sceneMgr.setHDRIntensity(newValue);
 		}, { immediate: true });
 	}
 
@@ -72,20 +80,6 @@ export default class SettingsMgr {
 	registerWatches(viewportScene){
 
 		const clearWatches = [];
-
-		clearWatches.push(watch(
-			()=>this.showHDRBackground.value, (newValue)=>{
-			viewportScene.showHDR(newValue);
-		}));
-		clearWatches.push(watch(
-			()=>this.lightingEnabled.value, (newValue)=>{
-			viewportScene.toggleLights(newValue);
-		}));
-		clearWatches.push(watch(
-			()=>this.hdrLightIntensity.value, (newValue)=>{
-			viewportScene.setHDRIntensity(newValue);
-		}));
-
 		return clearWatches;
 	}
 }
