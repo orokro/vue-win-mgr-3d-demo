@@ -1,14 +1,18 @@
 # vue-win-mgr-3d-demo
 
-This template should help get you started developing with Vue 3 in Vite.
+This is a project to demonstrate my `vue-win-mgr` library.
 
-## Recommended IDE Setup
+You can find that, here:
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+# Homepage
+[vue-win-mgr Homepage](https://orokro.github.io/Vue-Window-Manager/)
 
-## Customize configuration
+# Library Github
+[vue-win-mgr on Github](https://github.com/orokro/Vue-Window-Manager)
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+# Library NPM
+[vue-win-mgr on NPM](https://www.npmjs.com/package/vue-win-mgr)
+
 
 ## Project Setup
 
